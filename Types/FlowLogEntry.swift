@@ -20,11 +20,11 @@ extension OwnID.GigyaSDK {
 }
 
 public extension OwnID.GigyaSDK.FlowLogEntry {
-    static func entry<T>(function: String = #function, file: String = #file, context: String = "empty", message: String = "", _ : T.Type = T.self) -> OwnID.GigyaSDK.FlowLogEntry {
+    static func entry<T>(function: String = #function, file: String = #file, context: String = "no_context", message: String = "", _ : T.Type = T.self) -> OwnID.GigyaSDK.FlowLogEntry {
         OwnID.GigyaSDK.FlowLogEntry(context: context, message: "\(message) \(function) \(file)", codeInitiator: String(describing: T.self))
     }
     
-    static func errorEntry<T>(function: String = #function, file: String = #file, context: String = "empty", message: String = "", _ : T.Type = T.self) -> OwnID.GigyaSDK.FlowLogEntry {
+    static func errorEntry<T>(function: String = #function, file: String = #file, context: String = "no_context", message: String = "", _ : T.Type = T.self) -> OwnID.GigyaSDK.FlowLogEntry {
         OwnID.GigyaSDK.FlowLogEntry(context: context, logLevel: .error, message: "\(message) \(function) \(file)", codeInitiator: String(describing: T.self))
     }
 }
