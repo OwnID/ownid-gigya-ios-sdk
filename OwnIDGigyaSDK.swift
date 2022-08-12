@@ -52,7 +52,7 @@ public extension OwnID {
         /// Creates view model for register flow in Gigya and manages ``OwnID.FlowsSDK.RegisterView``
         /// - Parameters:
         ///   - instance: Instance of Gigya SDK (with custom schema if needed)
-        ///   - webLanguages: Languages for web view. List of well-formed [IETF BCP 47 language tag](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language) .   
+        ///   - webLanguages: Languages for web view. List of well-formed [IETF BCP 47 language tag](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language) .
         /// - Returns: View model for register flow
         public static func registrationViewModel<T: GigyaAccountProtocol>(instance: GigyaCore<T>,
                                                                           webLanguages: OwnID.CoreSDK.Languages = .init(rawValue: Locale.preferredLanguages),
@@ -64,6 +64,8 @@ public extension OwnID {
         /// View that encapsulates management of ``OwnID.SkipPasswordView`` state
         /// - Parameter viewModel: ``OwnID.FlowsSDK.RegisterView.ViewModel``
         /// - Parameter email: email to be used in link on login and displayed when loggin in
+        /// - Parameter visualConfig: contains information about how views will look like
+        /// - Parameter shouldImmidiatelyShowTooltip: provides direct control over if tooltip popover should be displayed
         /// - Returns: View to display
         public static func createRegisterView(viewModel: OwnID.FlowsSDK.RegisterView.ViewModel,
                                               email: Binding<String>,
@@ -93,6 +95,8 @@ public extension OwnID {
         /// View that encapsulates management of ``OwnID.SkipPasswordView`` state
         /// - Parameter viewModel: ``OwnID.LoginView.ViewModel``
         /// - Parameter usersEmail: Email to be used in link on login and displayed when loggin in
+        /// - Parameter visualConfig: contains information about how views will look like
+        /// - Parameter shouldImmidiatelyShowTooltip: provides direct control over if tooltip popover should be displayed
         /// - Returns: View to display
         public static func createLoginView(viewModel: OwnID.FlowsSDK.LoginView.ViewModel,
                                            usersEmail: Binding<String>,
