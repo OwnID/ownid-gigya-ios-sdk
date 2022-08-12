@@ -67,8 +67,12 @@ public extension OwnID {
         /// - Returns: View to display
         public static func createRegisterView(viewModel: OwnID.FlowsSDK.RegisterView.ViewModel,
                                               email: Binding<String>,
-                                              visualConfig: OwnID.UISDK.VisualLookConfig = .init()) -> OwnID.FlowsSDK.RegisterView {
-            OwnID.FlowsSDK.RegisterView(viewModel: viewModel, usersEmail: email, visualConfig: visualConfig)
+                                              visualConfig: OwnID.UISDK.VisualLookConfig = .init(),
+                                              shouldImmidiatelyShowTooltip: Binding<Bool>? = .none) -> OwnID.FlowsSDK.RegisterView {
+            OwnID.FlowsSDK.RegisterView(viewModel: viewModel,
+                                        usersEmail: email,
+                                        visualConfig: visualConfig,
+                                        shouldImmidiatelyShowTooltip: shouldImmidiatelyShowTooltip)
         }
         
         /// Creates view model for log in flow in Gigya and manages ``OwnID.FlowsSDK.RegisterView``
@@ -92,10 +96,12 @@ public extension OwnID {
         /// - Returns: View to display
         public static func createLoginView(viewModel: OwnID.FlowsSDK.LoginView.ViewModel,
                                            usersEmail: Binding<String>,
-                                           visualConfig: OwnID.UISDK.VisualLookConfig = .init()) -> OwnID.FlowsSDK.LoginView {
+                                           visualConfig: OwnID.UISDK.VisualLookConfig = .init(),
+                                           shouldImmidiatelyShowTooltip: Binding<Bool>? = .none) -> OwnID.FlowsSDK.LoginView {
             OwnID.FlowsSDK.LoginView(viewModel: viewModel,
                                      usersEmail: usersEmail,
-                                     visualConfig: visualConfig)
+                                     visualConfig: visualConfig,
+                                     shouldImmidiatelyShowTooltip: shouldImmidiatelyShowTooltip)
         }
     }
 }
