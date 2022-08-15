@@ -71,10 +71,12 @@ public extension OwnID {
                                               email: Binding<String>,
                                               visualConfig: OwnID.UISDK.VisualLookConfig = .init(),
                                               shouldImmidiatelyShowTooltip: Binding<Bool>? = .none) -> OwnID.FlowsSDK.RegisterView {
-            OwnID.FlowsSDK.RegisterView(viewModel: viewModel,
-                                        usersEmail: email,
-                                        visualConfig: visualConfig,
-                                        shouldImmidiatelyShowTooltip: shouldImmidiatelyShowTooltip)
+            let defaultBinding = Binding(get: { true }, set: { _ in })
+            let shouldImmidiatelyShowTooltipValue = shouldImmidiatelyShowTooltip ?? defaultBinding
+            return OwnID.FlowsSDK.RegisterView(viewModel: viewModel,
+                                               usersEmail: email,
+                                               visualConfig: visualConfig,
+                                               shouldImmidiatelyShowTooltip: shouldImmidiatelyShowTooltipValue)
         }
         
         /// Creates view model for log in flow in Gigya and manages ``OwnID.FlowsSDK.RegisterView``
@@ -102,10 +104,12 @@ public extension OwnID {
                                            usersEmail: Binding<String>,
                                            visualConfig: OwnID.UISDK.VisualLookConfig = .init(),
                                            shouldImmidiatelyShowTooltip: Binding<Bool>? = .none) -> OwnID.FlowsSDK.LoginView {
-            OwnID.FlowsSDK.LoginView(viewModel: viewModel,
-                                     usersEmail: usersEmail,
-                                     visualConfig: visualConfig,
-                                     shouldImmidiatelyShowTooltip: shouldImmidiatelyShowTooltip)
+            let defaultBinding = Binding(get: { true }, set: { _ in })
+            let shouldImmidiatelyShowTooltipValue = shouldImmidiatelyShowTooltip ?? defaultBinding
+            return OwnID.FlowsSDK.LoginView(viewModel: viewModel,
+                                            usersEmail: usersEmail,
+                                            visualConfig: visualConfig,
+                                            shouldImmidiatelyShowTooltip: shouldImmidiatelyShowTooltipValue)
         }
     }
 }
