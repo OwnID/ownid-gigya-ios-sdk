@@ -159,6 +159,17 @@ final class MyRegisterViewModel: ObservableObject {
 }
 ```
 
+We recommend showing tooltip for user when valid email is entered. Tooltip is kind of popup that gives hint for user to use OwnID button. You can use your own email validation, along with custom logic how to show this suggestion popup.
+
+For example, when user entered valid email, we use binding in OwnID view model to display tooltip.
+[Complete example](https://github.com/OwnID/ownid-demo-ios-sdk/blob/master/DemoAppComponents/LoggedOut/Register/RegisterViewModel.swift)
+```
+// recommended approach is to subscribe to publised property of email and use 
+// .removeDuplicates() along with .debounce
+ownIDViewModel.shouldShowTooltip = ownIDViewModel.shouldShowTooltipEmailProcessingClosure(emailValue)
+//...
+```
+
 **Important:** The OwnID `ownIDViewModel.register` function must be called in response to the `.readyToRegister` event. This `ownIDViewModel.register` function eventually calls the standard Gigya function `createUser(withEmail: password:)` to register the user in Gigya, so you do not need to call this Gigya function yourself.
 
 ### Add the OwnID View
@@ -245,6 +256,8 @@ var body: some View {
 }
 ```
 
+By default, tooltip popup will appear every time login view is shown.
+Use `shouldShowTooltip` to disable tooltip appear of tooltip completely. To do this, use assign `false`.
 
 ## Errors
 All errors from the SDK have an `OwnID.CoreSDK.Error` type. You can use them, for example, to properly ask the user to perform an action.
