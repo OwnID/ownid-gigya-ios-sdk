@@ -65,18 +65,13 @@ public extension OwnID {
         /// - Parameter viewModel: ``OwnID.FlowsSDK.RegisterView.ViewModel``
         /// - Parameter email: email to be used in link on login and displayed when loggin in
         /// - Parameter visualConfig: contains information about how views will look like
-        /// - Parameter shouldImmidiatelyShowTooltip: provides direct control over if tooltip popover should be displayed
         /// - Returns: View to display
         public static func createRegisterView(viewModel: OwnID.FlowsSDK.RegisterView.ViewModel,
                                               email: Binding<String>,
-                                              visualConfig: OwnID.UISDK.VisualLookConfig = .init(),
-                                              shouldImmidiatelyShowTooltip: Binding<Bool>? = .none) -> OwnID.FlowsSDK.RegisterView {
-            let defaultBinding = Binding(get: { true }, set: { _ in })
-            let shouldImmidiatelyShowTooltipValue = shouldImmidiatelyShowTooltip ?? defaultBinding
-            return OwnID.FlowsSDK.RegisterView(viewModel: viewModel,
-                                               usersEmail: email,
-                                               visualConfig: visualConfig,
-                                               shouldImmidiatelyShowTooltip: shouldImmidiatelyShowTooltipValue)
+                                              visualConfig: OwnID.UISDK.VisualLookConfig = .init()) -> OwnID.FlowsSDK.RegisterView {
+            OwnID.FlowsSDK.RegisterView(viewModel: viewModel,
+                                        usersEmail: email,
+                                        visualConfig: visualConfig)
         }
         
         /// Creates view model for log in flow in Gigya and manages ``OwnID.FlowsSDK.RegisterView``
@@ -98,18 +93,13 @@ public extension OwnID {
         /// - Parameter viewModel: ``OwnID.LoginView.ViewModel``
         /// - Parameter usersEmail: Email to be used in link on login and displayed when loggin in
         /// - Parameter visualConfig: contains information about how views will look like
-        /// - Parameter shouldImmidiatelyShowTooltip: provides direct control over if tooltip popover should be displayed
         /// - Returns: View to display
         public static func createLoginView(viewModel: OwnID.FlowsSDK.LoginView.ViewModel,
                                            usersEmail: Binding<String>,
-                                           visualConfig: OwnID.UISDK.VisualLookConfig = .init(),
-                                           shouldImmidiatelyShowTooltip: Binding<Bool>? = .none) -> OwnID.FlowsSDK.LoginView {
-            let defaultBinding = Binding(get: { true }, set: { _ in })
-            let shouldImmidiatelyShowTooltipValue = shouldImmidiatelyShowTooltip ?? defaultBinding
-            return OwnID.FlowsSDK.LoginView(viewModel: viewModel,
-                                            usersEmail: usersEmail,
-                                            visualConfig: visualConfig,
-                                            shouldImmidiatelyShowTooltip: shouldImmidiatelyShowTooltipValue)
+                                           visualConfig: OwnID.UISDK.VisualLookConfig = .init()) -> OwnID.FlowsSDK.LoginView {
+            OwnID.FlowsSDK.LoginView(viewModel: viewModel,
+                                     usersEmail: usersEmail,
+                                     visualConfig: visualConfig)
         }
     }
 }

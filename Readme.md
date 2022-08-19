@@ -9,7 +9,7 @@ The OwnID Gigya-iOS SDK is a client library written in Swift that provides a pas
 * [Add Package Dependency](#add-package-dependency)
 * [Add Property List File to Project](#add-property-list-file-to-project)
 * [Create URL Type (Custom URL Scheme)](#create-url-type-custom-url-scheme)
-* [Import OwnID Modules](#import-ownid-modules)
+* [Import OwnID Modules](#import-ownid-module)
 * [Initialize the SDK](#initialize-the-sdk)
 * [Implement the Registration Screen](#implement-the-registration-screen)
   + [Customize View Model](#customize-view-model)
@@ -31,10 +31,10 @@ Before incorporating OwnID into your iOS app, you must create an OwnID applicati
 In addition, ensure you have done everything to [add Gigya authentication to your iOS project](https://github.com/SAP/gigya-swift-sdk).
 
 ## Add Package Dependency
-The OwnID iOS SDK is distributed as an SPM package. Use the Swift Package Manager to add the following package dependency to your project:
+The SDK is distributed as an SPM package. Use the Swift Package Manager to add the following package dependency to your project:
 
 ```
-https://github.com/OwnID/ownid-ios-sdk
+https://github.com/OwnID/ownid-gigya-ios-sdk
 ```
 When prompted, select the **OwnIDGigyaSDK** product.
 
@@ -42,7 +42,7 @@ When prompted, select the **OwnIDGigyaSDK** product.
 
 When the application starts, the OwnID SDK automatically reads `OwnIDConfiguration.plist` from the file system to configure the default instance that is created. At a minimum, this PLIST file defines a redirection URI and unique app id. Create `OwnIDConfiguration.plist` and define the following mandatory parameters:
 
-[Complete example](../Demo/GigyaDemo/Misc/OwnIDConfiguration.plist)
+[Complete example](https://github.com/OwnID/ownid-demo-ios-sdk/blob/master/GigyaDemo/Misc/OwnIDConfiguration.plist)
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -66,7 +66,7 @@ You need to open your project and create a new URL type that corresponds to the 
 ## Import OwnID Module
 Once you have added the OwnID package dependency, you need to import the OwnID module so you can access the SDK features. As you implement OwnID in your project, add the following to your source files:
 
-[Complete example](../Demo/GigyaDemo/App/GigyaRegister.swift)
+[Complete example](https://github.com/OwnID/ownid-demo-ios-sdk/blob/master/GigyaDemo/App/GigyaRegister.swift)
 ```swift
 import OwnIDGigyaSDK
 ```
@@ -74,7 +74,7 @@ import OwnIDGigyaSDK
 ## Initialize the SDK
 The OwnID SDK must be initialized properly using the `configure()` function, preferably in the main entry point of your app (in the `@main` `App` struct). For example, enter:
 
-[Complete example](../Demo/GigyaDemo/App/DemoApp.swift)
+[Complete example](https://github.com/OwnID/ownid-demo-ios-sdk/blob/master/GigyaDemo/App/DemoApp.swift)
 ```swift
 @main
 struct ExampleApp: App {
@@ -94,7 +94,7 @@ Within a Model-View-ViewModel (MVVM) architecture pattern, adding the Skip Passw
 ### Customize View Model
 The OwnID view that inserts the Skip Password UI is bound to an instance of the OwnID view model. Before modifying your View layer, create an instance of this view model, `OwnID.FlowsSDK.RegisterView.ViewModel`, within your ViewModel layer:
 
-[Complete example](../Demo/GigyaDemo/App/GigyaRegister.swift)
+[Complete example](https://github.com/OwnID/ownid-demo-ios-sdk/blob/master/GigyaDemo/App/GigyaRegister.swift)
 ```swift
 final class MyRegisterViewModel: ObservableObject {
     // MARK: OwnID
@@ -104,8 +104,9 @@ final class MyRegisterViewModel: ObservableObject {
 
 After creating this OwnID view model, your View Model layer should listen to events from the OwnID Event Publisher, which allows your app to know what actions to take based on the user's interaction with the OwnID Web App. Simply add the following to your existing ViewModel layer to subscribe to the OwnID Event Publisher and respond to events (it can be placed just after the code that creates the OwnID view model instance).
 
-[Complete example](../Demo/GigyaDemo/App/GigyaRegister.swift)
-[Complete example](../Demo/ios-sdk-demo-components/DemoApp/LoggedOut/Register/RegisterViewModel.swift)
+[Complete example](https://github.com/OwnID/ownid-demo-ios-sdk/blob/master/GigyaDemo/App/GigyaRegister.swift)
+
+[Complete example](https://github.com/OwnID/ownid-demo-ios-sdk/tree/master/DemoAppComponents/LoggedOut/Register/RegisterViewModel.swift)
 ```swift
 final class MyRegisterViewModel: ObservableObject {
     // MARK: OwnID
@@ -159,26 +160,32 @@ final class MyRegisterViewModel: ObservableObject {
 }
 ```
 
+We recommend showing tooltip for user when valid email is entered. Tooltip is kind of popup that gives hint for user to use OwnID button. You can use your own email validation, along with custom logic how to show this suggestion popup.
+
+For example, when user entered valid email, we use binding in OwnID view model to display tooltip.
+
+[Complete example](https://github.com/OwnID/ownid-demo-ios-sdk/blob/master/DemoAppComponents/LoggedOut/Register/RegisterViewModel.swift)
+```
+// recommended approach is to subscribe to publised property of email and use 
+// .removeDuplicates() along with .debounce
+ownIDViewModel.shouldShowTooltip = ownIDViewModel.shouldShowTooltipEmailProcessingClosure(emailValue)
+//...
+```
+
 **Important:** The OwnID `ownIDViewModel.register` function must be called in response to the `.readyToRegister` event. This `ownIDViewModel.register` function eventually calls the standard Gigya function `createUser(withEmail: password:)` to register the user in Gigya, so you do not need to call this Gigya function yourself.
 
 ### Add the OwnID View
-Inserting the OwnID view into your View layer results in the Skip Password option appearing in your app. When the user selects Skip Password, the SDK opens a sheet to interact with the user. The code that creates this view accepts the OwnID view model as its argument. It is suggested that you pass user's email binding for properly creating accounts.
+Inserting the OwnID view into your View layer results in the OwnID button appearing in your app. When the user selects OwnID button, the SDK presents in app Safari browser to interact with the user. The code that creates this view accepts the OwnID view model as its argument. It is suggested that you pass user's email binding for properly creating accounts.
 
 It is reccomended to set height of button the same as text field and disable text field when OwnID is enabled. 
 
-![how it looks like](../drawings/skip_button_design.png) ![how it looks like](../drawings/skip_button_design_dark.png)
-
-[Complete example](../Demo/ios-sdk-demo-components/DemoApp/LoggedOut/Register/RegisterView.swift)
+[Complete example](https://github.com/OwnID/ownid-demo-ios-sdk/tree/master/DemoAppComponents/LoggedOut/Register/RegisterView.swift)
 ```swift
 //Put RegisterView inside your main view, preferably besides password field
 var body: some View {
     OwnID.GigyaSDK.createRegisterView(viewModel: viewModel.ownIDViewModel, email: usersEmail)
 }
 ```
-
-It is recommended that you hide `OwnID.FlowsSDK.RegisterView` when the user starts typing in the password text field. [Complete example](../Demo/ios-sdk-demo-components/DemoApp/LoggedOut/Register/RegisterView.swift)
-
-</details>
 
 ## Implement the Login Screen
 The process of implementing your Login screen is very similar to the one used to implement the Registration screen. When the user selects Skip Password on the Login screen and if the user has previously set up OwnID authentication, allows them to log in with OwnID.
@@ -188,7 +195,7 @@ Like the Registration screen, you add Skip Password to your application's Login 
 ### Customize View Model
 You need to create an instance of the view model, `OwnID.LoginView.ViewModel`, that the OwnID login view uses. Within your ViewModel layer, enter:
 
-[Complete example](../Demo/GigyaDemo/App/GigyaLogin.swift)
+[Complete example](https://github.com/OwnID/ownid-demo-ios-sdk/blob/master/GigyaDemo/App/GigyaLogin.swift)
 ```swift
 final class MyLogInViewModel: ObservableObject {
     // MARK: OwnID
@@ -198,7 +205,7 @@ final class MyLogInViewModel: ObservableObject {
 
 After creating this OwnID view model, your View Model layer should listen to events from the OwnID Event Publisher, which allows your app to know what actions to take based on the user's interaction with the Skip Password option. Simply add the following to your existing ViewModel layer to subscribe to the OwnID Event Publisher and respond to events.
 
-[Complete example](../Demo/GigyaDemo/App/GigyaLogin.swift)
+[Complete example](https://github.com/OwnID/ownid-demo-ios-sdk/blob/master/GigyaDemo/App/GigyaLogin.swift)
 ```swift
 final class MyLogInViewModel: ObservableObject {
     // MARK: OwnID
@@ -236,8 +243,9 @@ final class MyLogInViewModel: ObservableObject {
 ### Add OwnID View
 Inserting the OwnID view into your View layer results in the Skip Password option appearing in your app. When the user selects Skip Password, the SDK opens a sheet to interact with the user. It is recommended that you place the OwnID view, `OwnID.LoginView`, immediately after the password text field. The code that creates this view accepts the OwnID view model as its argument. It is suggested that you pass user's email binding for properly creating accounts.
 
-[Complete example](../Demo/ios-sdk-demo-components/DemoApp/LoggedOut/LogIn/LogInView.swift)
-[Complete example](../Demo/GigyaDemo/App/GigyaLogin.swift)
+[Complete example](https://github.com/OwnID/ownid-demo-ios-sdk/tree/master/DemoAppComponents/LoggedOut/LogIn/LogInView.swift)
+
+[Complete example](https://github.com/OwnID/ownid-demo-ios-sdk/blob/master/GigyaDemo/App/GigyaLogin.swift)
 ```swift
 //Put LoginView inside your main view, preferably below password field
 var body: some View {
@@ -251,18 +259,15 @@ var body: some View {
 }
 ```
 
-![how it looks like](../drawings/skip_button_design.png) ![how it looks like](../drawings/skip_button_design_dark.png)
-
-It is recommended that you hide `OwnID.FlowsSDK.LoginView` when the user starts typing in the password text field. 
-[Complete example](../Demo/ios-sdk-demo-components/DemoApp/LoggedOut/LogIn/LogInView.swift)
-
-</details>
+By default, tooltip popup will appear every time login view is shown.
+Use `shouldShowTooltip` to disable tooltip appear of tooltip completely. To do this, use assign `false`.
 
 ## Errors
 All errors from the SDK have an `OwnID.CoreSDK.Error` type. You can use them, for example, to properly ask the user to perform an action.
 
 Here are some of the possible errors:
-[Complete example](../OwnIDCoreSDK/SDK/Types/Error.swift)
+
+[Complete example](https://github.com/OwnID/ownid-core-ios-sdk/blob/master/Core/Sources/Types/Error.swift)
 ```swift
 switch error {
 case .unsecuredHttpPassed:
@@ -291,7 +296,7 @@ case .plugin(let pluginError):
 ### Interruptions
 The following is an example of handling interruptions:
 
-[Complete example](../Demo/GigyaDemo/App/GigyaRegister.swift)
+[Complete example](https://github.com/OwnID/ownid-demo-ios-sdk/blob/master/GigyaDemo/App/GigyaRegister.swift)
 ```swift
 case .failure(let ownIDSDKError):
     switch ownIDSDKError {
@@ -319,13 +324,14 @@ case .failure(let ownIDSDKError):
 ## Advanced Configuration
 
 ### Button Apperance
-It is possible to set button visual settings by passing `OwnID.UISDK.VisualLookConfig`.
+It is possible to set button visual settings by passing `OwnID.UISDK.VisualLookConfig`. Additionally, you can override default behaviour of tooltip appearing or other settings in `OwnID.UISDK.TooltipVisualLookConfig`.
 
 ```swift
-let config = OwnID.UISDK.VisualLookConfig(buttonForegroundColor: .red,
-                                          backgroundColor: .brown,
-                                          borderColor: .brown,
-                                          shadowColor: .cyan)
+let tooltipConfig = OwnID.UISDK.TooltipVisualLookConfig(backgroundColor: .pink,
+                                                        borderColor: .accentColor)
+let config = OwnID.UISDK.VisualLookConfig(biometryIconColor: .red,
+                                          shadowColor: .cyan,
+                                          tooltipVisualLookConfig: tooltipConfig)
 OwnID.GigyaSDK.createLoginView(viewModel: ownIDViewModel,
                                usersEmail: usersEmail,
                                visualConfig: config)
@@ -344,19 +350,6 @@ By default, the OwnID Web App is launched with a language TAGs list (well-formed
 ```swift
 OwnID.GigyaSDK.createRegisterView(viewModel: viewModel.ownIDViewModel,
                                   webLanguages: OwnID.CoreSDK.Languages.init(rawValue: ["he"]))
-```
-
-### Directing Users to the OwnID iOS App
-By default, the SDK directs the user to the OwnID Web App to register or login with OwnID. However, with a small configuration, users who have the native OwnID app installed on their mobile device can complete the registration/login process in the native app rather than the web app.
-
-To direct the user to the OwnID native app, edit the `LSApplicationQueriesSchemes` key in your `Info.plist` file. Simply add `ownidopener` as a string in the `LSApplicationQueriesSchemes` array.
-Example:
-[Complete example](../Demo/GigyaDemo/Misc/Info.plist)
-```xml
-<key>LSApplicationQueriesSchemes</key>
-<array>
-  <string>ownidopener</string>
-</array>
 ```
 
 ## Logging
