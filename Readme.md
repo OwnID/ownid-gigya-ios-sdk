@@ -1,3 +1,6 @@
+![OwnIDSDK](./logo.svg)
+
+
 # OwnID Gigya-iOS SDK
 
 The OwnID Gigya-iOS SDK integrates with Email/Password-based [Gigya Authentication](https://github.com/SAP/gigya-swift-sdk) for apps that do not use Screen-Sets. If your app uses Gigya Screen-Sets, you should use the OwnID Gigya-Screen-Sets iOS SDK instead. For instructions, see the **[Gigya-Screen-Sets guide](sdk-gigya-screens-doc.md)**.
