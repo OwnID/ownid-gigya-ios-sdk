@@ -72,7 +72,7 @@ extension OwnID.GigyaSDK {
                     OwnID.CoreSDK.logger.logGigya(.errorEntry(message: "error: \(error)", Self.self))
                     promise(.failure(.plugin(error: error)))
                 }
-                guard let data = data else { handle(error: .cannotParseSession); return }
+                guard let data else { handle(error: .cannotParseSession); return }
                 if let errorString = data["errorJson"] as? String,
                    let errorData = errorString.data(using: .utf8),
                    let errorMetadata = try? JSONDecoder().decode(ErrorMetadata.self, from: errorData) {
