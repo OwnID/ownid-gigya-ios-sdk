@@ -58,7 +58,12 @@ public extension OwnID {
                                                                           webLanguages: OwnID.CoreSDK.Languages = .init(rawValue: Locale.preferredLanguages),
                                                                           sdkName: String = sdkName) -> OwnID.FlowsSDK.RegisterView.ViewModel {
             let performer = Registration.Performer(instance: instance, sdkConfigurationName: sdkName)
-            return OwnID.FlowsSDK.RegisterView.ViewModel(registrationPerformer: performer, sdkConfigurationName: sdkName, webLanguages: webLanguages)
+            let performerLogin = LoginPerformer(instance: instance,
+                                           sdkConfigurationName: sdkName)
+            return OwnID.FlowsSDK.RegisterView.ViewModel(registrationPerformer: performer,
+                                                         loginPerformer: performerLogin,
+                                                         sdkConfigurationName: sdkName,
+                                                         webLanguages: webLanguages)
         }
         
         /// View that encapsulates management of ``OwnID.SkipPasswordView`` state
