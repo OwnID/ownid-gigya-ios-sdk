@@ -2,7 +2,6 @@ import Foundation
 import Gigya
 import OwnIDCoreSDK
 import Combine
-import OwnIDFlowsSDK
 
 extension OwnID.GigyaSDK {
     struct SessionInfo: Decodable {

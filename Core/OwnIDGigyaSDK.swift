@@ -1,5 +1,4 @@
 @_exported import OwnIDCoreSDK
-@_exported import OwnIDUISDK
 import Combine
 import SwiftUI
 import Gigya

@@ -1,5 +1,4 @@
 import OwnIDCoreSDK
-import OwnIDFlowsSDK
 import Gigya
 import Combine
 import SwiftUI
