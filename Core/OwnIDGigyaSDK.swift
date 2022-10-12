@@ -85,10 +85,10 @@ public extension OwnID {
         /// - Returns: View model for log in
         public static func loginViewModel<T: GigyaAccountProtocol>(instance: GigyaCore<T>,
                                                                    webLanguages: OwnID.CoreSDK.Languages = .init(rawValue: Locale.preferredLanguages),
-                                                                   sdkName: String = sdkName) -> OwnID.FlowsSDK.LoginView.ViewModel {
+                                                                   sdkName: String = sdkName) -> OwnID.FlowsSDK.FlowsLoginViewModel {
             let performer = LoginPerformer(instance: instance,
                                            sdkConfigurationName: sdkName)
-            return OwnID.FlowsSDK.LoginView.ViewModel(loginPerformer: performer,
+            return OwnID.FlowsSDK.FlowsLoginViewModel(loginPerformer: performer,
                                                       sdkConfigurationName: sdkName,
                                                       webLanguages: webLanguages)
         }
@@ -98,7 +98,8 @@ public extension OwnID {
         /// - Parameter usersEmail: Email to be used in link on login and displayed when loggin in
         /// - Parameter visualConfig: contains information about how views will look like
         /// - Returns: View to display
-        public static func createLoginView(viewModel: OwnID.FlowsSDK.LoginView.ViewModel,
+        @available(iOS 15, *)
+        public static func createLoginView(viewModel: OwnID.FlowsSDK.FlowsLoginViewModel,
                                            usersEmail: Binding<String>,
                                            visualConfig: OwnID.UISDK.VisualLookConfig = .init()) -> OwnID.FlowsSDK.LoginView {
             OwnID.FlowsSDK.LoginView(viewModel: viewModel,
