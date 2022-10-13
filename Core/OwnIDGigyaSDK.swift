@@ -98,7 +98,7 @@ public extension OwnID {
         /// - Parameter usersEmail: Email to be used in link on login and displayed when loggin in
         /// - Parameter visualConfig: contains information about how views will look like
         /// - Returns: View to display
-        @available(iOS 15, *)
+//        @available(iOS 15, *)
         public static func createLoginView(viewModel: OwnID.FlowsSDK.FlowsLoginViewModel,
                                            usersEmail: Binding<String>,
                                            visualConfig: OwnID.UISDK.VisualLookConfig = .init()) -> OwnID.FlowsSDK.LoginView {
