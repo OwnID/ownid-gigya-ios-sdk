@@ -1,5 +1,4 @@
 @_exported import OwnIDCoreSDK
-@_exported import OwnIDUISDK
 import Combine
 import SwiftUI
 import Gigya
@@ -59,7 +58,7 @@ public extension OwnID {
                                                                           sdkName: String = sdkName) -> OwnID.FlowsSDK.RegisterView.ViewModel {
             let performer = Registration.Performer(instance: instance, sdkConfigurationName: sdkName)
             let performerLogin = LoginPerformer(instance: instance,
-                                           sdkConfigurationName: sdkName)
+                                                sdkConfigurationName: sdkName)
             return OwnID.FlowsSDK.RegisterView.ViewModel(registrationPerformer: performer,
                                                          loginPerformer: performerLogin,
                                                          sdkConfigurationName: sdkName,
