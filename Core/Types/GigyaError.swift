@@ -13,7 +13,6 @@ public extension OwnID.GigyaSDK {
         case passwordIsNotValid
         case mainSDKCancelled
         case cannotInitSession
-        case cannotParseRegistrationParameters
         case cannotParseRegistrationMetadataParameter
         case cannotParseSession
         case accountNeedsVerification(errorMetadata: ErrorMetadata)
@@ -41,8 +40,7 @@ extension OwnID.GigyaSDK.Error: LocalizedError {
             return "ID token is missing"
         case .cannotInitSession:
             return "Cannot create session"
-        case .cannotParseRegistrationParameters,
-             .cannotParseRegistrationMetadataParameter:
+        case .cannotParseRegistrationMetadataParameter:
             return "Registration parameters passed are invalid"
         case .cannotParseSession:
             return "Parsing error"
