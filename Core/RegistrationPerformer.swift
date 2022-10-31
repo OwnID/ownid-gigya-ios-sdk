@@ -48,7 +48,7 @@ extension OwnID.GigyaSDK.Registration {
             }
             
             guard configuration.email.isValid else { handle(error: .emailIsNotValid); return }
-            guard let gigyaParameters = parameters as? OwnID.GigyaSDK.Registration.Parameters else { handle(error: .cannotParseRegistrationParameters); return }
+            let gigyaParameters = parameters as? OwnID.GigyaSDK.Registration.Parameters ?? OwnID.GigyaSDK.Registration.Parameters(parameters: [:])
             guard let metadata = configuration.payload.metadata,
                   let dataField = (metadata as? [String: Any])?["dataField"] as? String
             else { handle(error: .cannotParseRegistrationMetadataParameter); return }
