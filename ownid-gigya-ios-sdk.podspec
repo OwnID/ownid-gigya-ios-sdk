@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'ownid-gigya-ios-sdk'
-  s.version          = '2.0.1'
+  s.version          = '2.0.2'
   s.summary          = 'ownid-gigya-ios-sdk'
 
   s.description      = <<-DESC
