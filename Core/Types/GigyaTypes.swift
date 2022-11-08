@@ -4,5 +4,5 @@ import Combine
 import Gigya
 
 public extension OwnID.GigyaSDK {
-    typealias EventPublisher = AnyPublisher<VoidOperationResult, OwnID.CoreSDK.Error>
+    typealias EventPublisher = AnyPublisher<OwnID.LoginResult, OwnID.CoreSDK.Error>
 }

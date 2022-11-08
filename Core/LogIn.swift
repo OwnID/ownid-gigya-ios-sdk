@@ -65,13 +65,13 @@ extension OwnID.GigyaSDK {
 
 extension OwnID.GigyaSDK {
     enum LogIn {
-        static func logIn<T: GigyaAccountProtocol>(instance: GigyaCore<T>, data: [String: Any]?) -> EventPublisher {
-            Future<VoidOperationResult, OwnID.CoreSDK.Error> { promise in
+        static func logIn<T: GigyaAccountProtocol>(instance: GigyaCore<T>, payload: OwnID.CoreSDK.Payload) -> EventPublisher {
+            Future<OwnID.LoginResult, OwnID.CoreSDK.Error> { promise in
                 func handle(error: OwnID.GigyaSDK.Error<T>) {
                     OwnID.CoreSDK.logger.logGigya(.errorEntry(message: "error: \(error)", Self.self))
                     promise(.failure(.plugin(error: error)))
                 }
-                guard let data = data else { handle(error: .cannotParseSession); return }
+                guard let data = payload.dataContainer as? [String: Any] else { handle(error: .cannotParseSession); return }
                 if let errorString = data["errorJson"] as? String,
                    let errorData = errorString.data(using: .utf8),
                    let errorMetadata = try? JSONDecoder().decode(ErrorMetadata.self, from: errorData) {
@@ -92,7 +92,7 @@ extension OwnID.GigyaSDK {
                         switch result {
                         case .success(let account):
                             OwnID.CoreSDK.logger.logGigya(.entry(message: "account \(String(describing: account.UID))", Self.self))
-                            promise(.success(VoidOperationResult()))
+                            promise(.success(OwnID.LoginResult(operationResult: VoidOperationResult(), authType: payload.authType)))
                             
                         case .failure(let error):
                             handle(error: .gigyaSDK(error: error))
