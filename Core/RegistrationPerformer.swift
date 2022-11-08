@@ -8,7 +8,7 @@ public extension OwnID.GigyaSDK {
 }
 
 extension OwnID.GigyaSDK.Registration {
-    public typealias PublisherType = AnyPublisher<OperationResult, OwnID.CoreSDK.Error>
+    public typealias PublisherType = AnyPublisher<OwnID.RegisterResult, OwnID.CoreSDK.Error>
     
     public struct Parameters: RegisterParameters {
         public init(parameters: [String: Any]) {
@@ -41,7 +41,7 @@ extension OwnID.GigyaSDK.Registration {
     static func register<T: GigyaAccountProtocol>(instance: GigyaCore<T>,
                                                   configuration: OwnID.FlowsSDK.RegistrationConfiguration,
                                                   parameters: RegisterParameters) -> PublisherType {
-        Future<OperationResult, OwnID.CoreSDK.Error> { promise in
+        Future<OwnID.RegisterResult, OwnID.CoreSDK.Error> { promise in
             func handle(error: OwnID.GigyaSDK.Error<T>) {
                 OwnID.CoreSDK.logger.logGigya(.errorEntry(message: "error: \(error)", Self.self))
                 promise(.failure(.plugin(error: error)))
@@ -64,14 +64,14 @@ extension OwnID.GigyaSDK.Registration {
                 case .success(let account):
                     let UID = account.UID ?? ""
                     OwnID.CoreSDK.logger.logGigya(.entry(context: configuration.payload.context, message: "UID \(UID.logValue)", Self.self))
-                    promise(.success(VoidOperationResult()))
+                    promise(.success(OwnID.RegisterResult(operationResult: VoidOperationResult(), authType: configuration.payload.authType)))
                     
                 case .failure(let error):
                     handle(error: .login(error: error))
                 }
             }
         }
-        .map { $0 as OperationResult }
+        .map { $0 as OwnID.RegisterResult }
         .eraseToAnyPublisher()
     }
 }
