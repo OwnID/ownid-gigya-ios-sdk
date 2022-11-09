@@ -57,7 +57,10 @@ extension OwnID.GigyaSDK.Registration {
             let ownIDParameters = [dataField: configuration.payload.dataContainer]
             registerParams["data"] = ownIDParameters
             
-            addLocaleToParams(locale: "he", params: &registerParams)
+            if var language = configuration.payload.requestLanguage {
+                language = String(language.prefix(2))
+                addLocaleToParams(locale: language, params: &registerParams)
+            }
             
             instance.register(email: configuration.email.rawValue,
                               password: OwnID.FlowsSDK.Password.generatePassword().passwordString,
