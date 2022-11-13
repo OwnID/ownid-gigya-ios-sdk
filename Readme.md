@@ -329,13 +329,15 @@ case .failure(let ownIDSDKError):
 
 ### Button Apperance
 It is possible to set button visual settings by passing `OwnID.UISDK.VisualLookConfig`. Additionally, you can override default behaviour of tooltip appearing or other settings in `OwnID.UISDK.TooltipVisualLookConfig`.
+By passing `widgetPosition` or text view will change it's position.
 
 ```swift
 let tooltipConfig = OwnID.UISDK.TooltipVisualLookConfig(backgroundColor: .pink,
                                                         borderColor: .accentColor)
 let config = OwnID.UISDK.VisualLookConfig(biometryIconColor: .red,
                                           shadowColor: .cyan,
-                                          tooltipVisualLookConfig: tooltipConfig)
+                                          tooltipVisualLookConfig: tooltipConfig, 
+					  widgetPosition: .start)
 OwnID.GigyaSDK.createLoginView(viewModel: ownIDViewModel,
                                usersEmail: usersEmail,
                                visualConfig: config)
