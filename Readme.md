@@ -328,7 +328,7 @@ case .failure(let ownIDSDKError):
 
 ### Button Apperance
 It is possible to set button visual settings by passing `OwnID.UISDK.VisualLookConfig`. Additionally, you can override default behaviour of tooltip appearing or other settings in `OwnID.UISDK.TooltipVisualLookConfig`.
-By passing `widgetPosition` or text view will change it's position.
+By passing `widgetPosition`, `or` text view will change it's position accordingly.
 
 ```swift
 let tooltipConfig = OwnID.UISDK.TooltipVisualLookConfig(backgroundColor: .pink,
