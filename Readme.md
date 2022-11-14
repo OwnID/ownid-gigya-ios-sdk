@@ -108,7 +108,6 @@ After creating this OwnID view model, your View Model layer should listen to eve
 
 [Complete example](https://github.com/OwnID/ownid-ios-sdk-demo/blob/master/GigyaDemo/RegisterViewModel.swift)
 
-[Complete example](https://github.com/OwnID/ownid-demo-ios-sdk/tree/master/DemoAppComponents/LoggedOut/Register/RegisterViewModel.swift)
 ```swift
 final class MyRegisterViewModel: ObservableObject {
     // MARK: OwnID
