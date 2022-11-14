@@ -170,7 +170,7 @@ We recommend showing tooltip for user when valid email is entered. Tooltip is ki
 For example, when user entered valid email, we use binding in OwnID view model to display tooltip.
 
 [Complete example](https://github.com/OwnID/ownid-ios-sdk-demo/blob/master/GigyaDemo/RegisterViewModel.swift)
-```
+```swift
 // recommended approach is to subscribe to publised property of email and use 
 // .removeDuplicates() along with .debounce
 ownIDViewModel.shouldShowTooltip = ownIDViewModel.shouldShowTooltipEmailProcessingClosure(emailValue)
@@ -363,7 +363,7 @@ As alternative to OwnID button it is possible to use custom view to call functio
 
 Create simple `PassthroughSubject`. After you created custom view, on press send void action through this `PassthroughSubject`. In your `viewModel`, make `ownIDViewModel` to subscribe to this newly created publisher.
 
-[Complete example](https://github.com/OwnID/ownid-demo-ios-sdk/blob/master/ownid-demo-components-ios/DemoAppComponents/LoggedOut/LogIn/LogInView.swift
+[Complete example](https://github.com/OwnID/ownid-demo-ios-sdk/blob/master/ownid-demo-components-ios/DemoAppComponents/LoggedOut/LogIn/LogInView.swift)
 
 ```swift
 ownIDViewModel.subscribe(to: self.buttonPressedPublisher.eraseToAnyPublisher())
