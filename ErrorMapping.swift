@@ -7,7 +7,8 @@ extension OwnID.GigyaSDK {
             switch error.error {
             case .gigyaError(let data):
                 let registeredErrorCodes = [206001, 206002, 206006, 403102, 403101]
-                if registeredErrorCodes.contains(data.errorCode) {
+                let gigyaError = data.errorCode
+                if registeredErrorCodes.contains(gigyaError) {
                     sendAnalytic(context: context, authType: authType)
                 }
                 
