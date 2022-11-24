@@ -69,10 +69,16 @@ extension OwnID.GigyaSDK.Registration {
                 switch result {
                 case .success(let account):
                     let UID = account.UID ?? ""
-                    OwnID.CoreSDK.logger.logGigya(.entry(context: configuration.payload.context, message: "UID \(UID.logValue)", Self.self))
-                    promise(.success(OwnID.RegisterResult(operationResult: VoidOperationResult(), authType: configuration.payload.authType)))
+                    OwnID.CoreSDK.logger.logGigya(.entry(context: configuration.payload.context,
+                                                         message: "UID \(UID.logValue)",
+                                                         Self.self))
+                    promise(.success(OwnID.RegisterResult(operationResult: VoidOperationResult(),
+                                                          authType: configuration.payload.authType)))
                     
                 case .failure(let error):
+                    OwnID.GigyaSDK.ErrorMapper.mapRegistrationError(error: error,
+                                                                    context: configuration.payload.context,
+                                                                    authType: configuration.payload.authType)
                     handle(error: .login(error: error))
                 }
             }
