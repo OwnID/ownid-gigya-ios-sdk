@@ -43,7 +43,9 @@ extension OwnID.GigyaSDK.Registration {
                                                   parameters: RegisterParameters) -> PublisherType {
         Future<OwnID.RegisterResult, OwnID.CoreSDK.Error> { promise in
             func handle(error: OwnID.GigyaSDK.Error<T>) {
-                OwnID.CoreSDK.logger.logGigya(.errorEntry(message: "error: \(error)", Self.self))
+                OwnID.CoreSDK.logger.logGigya(.errorEntry(context: configuration.payload.context,
+                                                          message: "error: \(error)",
+                                                          Self.self))
                 promise(.failure(.plugin(error: error)))
             }
             
