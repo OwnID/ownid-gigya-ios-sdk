@@ -93,7 +93,7 @@ extension OwnID.GigyaSDK {
                     instance.getAccount { result in
                         switch result {
                         case .success(let account):
-                            OwnID.CoreSDK.logger.logGigya(.entry(message: "account \(String(describing: account.UID))", Self.self))
+                            OwnID.CoreSDK.logger.logGigya(.entry(context: payload.context, message: "account \(String(describing: account.UID))", Self.self))
                             promise(.success(OwnID.LoginResult(operationResult: VoidOperationResult(), authType: payload.authType)))
                             
                         case .failure(let error):
