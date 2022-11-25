@@ -90,16 +90,8 @@ extension OwnID.GigyaSDK {
                                               expiration: sessionInfo.expiration) {
                     
                     instance.setSession(session)
-                    instance.getAccount { result in
-                        switch result {
-                        case .success(let account):
-                            OwnID.CoreSDK.logger.logGigya(.entry(context: payload.context, message: "account \(String(describing: account.UID))", Self.self))
-                            promise(.success(OwnID.LoginResult(operationResult: VoidOperationResult(), authType: payload.authType)))
-                            
-                        case .failure(let error):
-                            handle(error: .gigyaSDK(error: error))
-                        }
-                    }
+                    OwnID.CoreSDK.logger.logGigya(.entry(context: payload.context, Self.self))
+                    promise(.success(OwnID.LoginResult(operationResult: VoidOperationResult(), authType: payload.authType)))
                 } else {
                     handle(error: .cannotInitSession)
                 }
