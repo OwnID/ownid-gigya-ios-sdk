@@ -14,7 +14,7 @@ extension OwnID.GigyaSDK {
             self.sdkConfigurationName = sdkConfigurationName
         }
         
-        func login(payload: OwnID.CoreSDK.Payload, email: String) -> AnyPublisher<OwnID.LoginResult, OwnID.CoreSDK.Error> {
+        func login(payload: OwnID.CoreSDK.Payload, email: String) -> AnyPublisher<OwnID.LoginResult, OwnID.CoreSDK.CoreErrorLogWrapper> {
             OwnID.GigyaSDK.LogIn.logIn(instance: instance, payload: payload)
                 .map { $0 as OwnID.LoginResult }
                 .eraseToAnyPublisher()

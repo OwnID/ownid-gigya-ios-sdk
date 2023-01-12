@@ -29,6 +29,12 @@ public extension OwnID.GigyaSDK.FlowLogEntry {
     }
 }
 
+extension OwnID.CoreSDK.CoreErrorLogWrapper {
+    static func gigyaLog(entry: OwnID.FlowsSDK.FlowLogEntry, error: OwnID.CoreSDK.Error) -> OwnID.CoreSDK.CoreErrorLogWrapper {
+        OwnID.CoreSDK.CoreErrorLogWrapper(entry: entry, error: error)
+    }
+}
+
 extension LoggerProtocol {
     func logGigya(_ entry: OwnID.GigyaSDK.FlowLogEntry) {
         self.log(entry)
