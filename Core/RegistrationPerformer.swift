@@ -43,7 +43,7 @@ extension OwnID.GigyaSDK.Registration {
                                                   parameters: RegisterParameters) -> PublisherType {
         Future<OwnID.RegisterResult, OwnID.CoreSDK.CoreErrorLogWrapper> { promise in
             func handle(error: OwnID.GigyaSDK.Error<T>) {
-                promise(.failure(.gigyaLog(entry: .errorEntry(context: configuration.payload.context, Self.self), error: .plugin(underlying: error))))
+                promise(.failure(.coreLog(entry: .errorEntry(context: configuration.payload.context, Self.self), error: .plugin(underlying: error))))
             }
             
             guard configuration.email.isValid else { handle(error: .emailIsNotValid); return }
@@ -68,7 +68,7 @@ extension OwnID.GigyaSDK.Registration {
                 switch result {
                 case .success(let account):
                     let UID = account.UID ?? ""
-                    OwnID.CoreSDK.logger.logGigya(.entry(context: configuration.payload.context,
+                    OwnID.CoreSDK.logger.logCore(.entry(context: configuration.payload.context,
                                                          message: "UID \(UID.logValue)",
                                                          Self.self))
                     promise(.success(OwnID.RegisterResult(operationResult: VoidOperationResult(),
