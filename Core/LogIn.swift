@@ -66,12 +66,9 @@ extension OwnID.GigyaSDK {
 extension OwnID.GigyaSDK {
     enum LogIn {
         static func logIn<T: GigyaAccountProtocol>(instance: GigyaCore<T>, payload: OwnID.CoreSDK.Payload) -> EventPublisher {
-            Future<OwnID.LoginResult, OwnID.CoreSDK.Error> { promise in
+            Future<OwnID.LoginResult, OwnID.CoreSDK.CoreErrorLogWrapper> { promise in
                 func handle(error: OwnID.GigyaSDK.Error<T>) {
-                    OwnID.CoreSDK.logger.logGigya(.errorEntry(context: payload.context,
-                                                              message: "error: \(error)",
-                                                              Self.self))
-                    promise(.failure(.plugin(error: error)))
+                    promise(.failure(.coreLog(entry: .errorEntry(context: payload.context, Self.self), error: .plugin(underlying: error))))
                 }
                 guard let data = payload.dataContainer as? [String: Any] else { handle(error: .cannotParseSession); return }
                 if let errorString = data["errorJson"] as? String,
@@ -91,7 +88,7 @@ extension OwnID.GigyaSDK {
                                               expiration: sessionInfo.expiration) {
                     
                     instance.setSession(session)
-                    OwnID.CoreSDK.logger.logGigya(.entry(context: payload.context, Self.self))
+                    OwnID.CoreSDK.logger.logCore(.entry(context: payload.context, Self.self))
                     promise(.success(OwnID.LoginResult(operationResult: VoidOperationResult(), authType: payload.authType)))
                 } else {
                     handle(error: .cannotInitSession)

@@ -8,7 +8,7 @@ public extension OwnID.GigyaSDK {
 }
 
 extension OwnID.GigyaSDK.Registration {
-    public typealias PublisherType = AnyPublisher<OwnID.RegisterResult, OwnID.CoreSDK.Error>
+    public typealias PublisherType = AnyPublisher<OwnID.RegisterResult, OwnID.CoreSDK.CoreErrorLogWrapper>
     
     public struct Parameters: RegisterParameters {
         public init(parameters: [String: Any]) {
@@ -41,12 +41,9 @@ extension OwnID.GigyaSDK.Registration {
     static func register<T: GigyaAccountProtocol>(instance: GigyaCore<T>,
                                                   configuration: OwnID.FlowsSDK.RegistrationConfiguration,
                                                   parameters: RegisterParameters) -> PublisherType {
-        Future<OwnID.RegisterResult, OwnID.CoreSDK.Error> { promise in
+        Future<OwnID.RegisterResult, OwnID.CoreSDK.CoreErrorLogWrapper> { promise in
             func handle(error: OwnID.GigyaSDK.Error<T>) {
-                OwnID.CoreSDK.logger.logGigya(.errorEntry(context: configuration.payload.context,
-                                                          message: "error: \(error)",
-                                                          Self.self))
-                promise(.failure(.plugin(error: error)))
+                promise(.failure(.coreLog(entry: .errorEntry(context: configuration.payload.context, Self.self), error: .plugin(underlying: error))))
             }
             
             guard configuration.email.isValid else { handle(error: .emailIsNotValid); return }
@@ -71,7 +68,7 @@ extension OwnID.GigyaSDK.Registration {
                 switch result {
                 case .success(let account):
                     let UID = account.UID ?? ""
-                    OwnID.CoreSDK.logger.logGigya(.entry(context: configuration.payload.context,
+                    OwnID.CoreSDK.logger.logCore(.entry(context: configuration.payload.context,
                                                          message: "UID \(UID.logValue)",
                                                          Self.self))
                     promise(.success(OwnID.RegisterResult(operationResult: VoidOperationResult(),
