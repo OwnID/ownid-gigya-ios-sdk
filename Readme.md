@@ -354,7 +354,7 @@ By default, the OwnID Web App is launched with a language TAGs list (well-formed
 
 ```swift
 OwnID.GigyaSDK.createRegisterView(viewModel: viewModel.ownIDViewModel,
-                                  webLanguages: OwnID.CoreSDK.Languages.init(rawValue: ["he"]))
+                                  supportedLanguages: OwnID.CoreSDK.Languages.init(rawValue: ["he"]))
 ```
 
 

@@ -5,7 +5,7 @@ import Gigya
 
 public extension OwnID.GigyaSDK {
     static let sdkName = "Gigya"
-    static let version = "2.1.1"
+    static let version = "2.2.0"
 }
 
 public extension OwnID {
@@ -51,10 +51,10 @@ public extension OwnID {
         /// Creates view model for register flow in Gigya and manages ``OwnID.FlowsSDK.RegisterView``
         /// - Parameters:
         ///   - instance: Instance of Gigya SDK (with custom schema if needed)
-        ///   - webLanguages: Languages for web view. List of well-formed [IETF BCP 47 language tag](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language) .
+        ///   - supportedLanguages: Languages for web view. List of well-formed [IETF BCP 47 language tag](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language) .
         /// - Returns: View model for register flow
         public static func registrationViewModel<T: GigyaAccountProtocol>(instance: GigyaCore<T>,
-                                                                          webLanguages: OwnID.CoreSDK.Languages = .init(rawValue: Locale.preferredLanguages),
+                                                                          supportedLanguages: OwnID.CoreSDK.Languages = .init(rawValue: Locale.preferredLanguages),
                                                                           sdkName: String = sdkName) -> OwnID.FlowsSDK.RegisterView.ViewModel {
             let performer = Registration.Performer(instance: instance, sdkConfigurationName: sdkName)
             let performerLogin = LoginPerformer(instance: instance,
@@ -62,7 +62,7 @@ public extension OwnID {
             return OwnID.FlowsSDK.RegisterView.ViewModel(registrationPerformer: performer,
                                                          loginPerformer: performerLogin,
                                                          sdkConfigurationName: sdkName,
-                                                         webLanguages: webLanguages)
+                                                         supportedLanguages: supportedLanguages)
         }
         
         /// View that encapsulates management of ``OwnID.SkipPasswordView`` state
@@ -81,16 +81,16 @@ public extension OwnID {
         /// Creates view model for log in flow in Gigya and manages ``OwnID.FlowsSDK.RegisterView``
         /// - Parameters:
         ///   - instance: Instance of Gigya SDK (with custom schema if needed)
-        ///   - webLanguages: Languages for web view. List of well-formed [IETF BCP 47 language tag](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language) .
+        ///   - supportedLanguages: Languages for web view. List of well-formed [IETF BCP 47 language tag](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language) .
         /// - Returns: View model for log in
         public static func loginViewModel<T: GigyaAccountProtocol>(instance: GigyaCore<T>,
-                                                                   webLanguages: OwnID.CoreSDK.Languages = .init(rawValue: Locale.preferredLanguages),
+                                                                   supportedLanguages: OwnID.CoreSDK.Languages = .init(rawValue: Locale.preferredLanguages),
                                                                    sdkName: String = sdkName) -> OwnID.FlowsSDK.LoginView.ViewModel {
             let performer = LoginPerformer(instance: instance,
                                            sdkConfigurationName: sdkName)
             return OwnID.FlowsSDK.LoginView.ViewModel(loginPerformer: performer,
                                                       sdkConfigurationName: sdkName,
-                                                      webLanguages: webLanguages)
+                                                      supportedLanguages: supportedLanguages)
         }
         
         /// View that encapsulates management of ``OwnID.SkipPasswordView`` state
