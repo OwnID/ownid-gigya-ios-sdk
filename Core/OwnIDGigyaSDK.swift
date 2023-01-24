@@ -53,33 +53,28 @@ public extension OwnID {
         /// Creates view model for register flow to manage ``OwnID.FlowsSDK.RegisterView``
         /// - Parameters:
         ///   - instance: Instance of Gigya SDK (with custom schema if needed)
-        public static func registrationViewModel<T: GigyaAccountProtocol>(instance: GigyaCore<T>) -> OwnID.FlowsSDK.RegisterView.ViewModel {
+        ///   - emailPublisher: creates account for this user ID
+        public static func registrationViewModel<T: GigyaAccountProtocol>(instance: GigyaCore<T>,
+                                                                          emailPublisher: AnyPublisher<String, Never>) -> OwnID.FlowsSDK.RegisterView.ViewModel {
             let performer = Registration.Performer(instance: instance, sdkConfigurationName: sdkName)
             let performerLogin = LoginPerformer(instance: instance)
             return OwnID.FlowsSDK.RegisterView.ViewModel(registrationPerformer: performer,
                                                          loginPerformer: performerLogin,
-                                                         sdkConfigurationName: sdkName)
+                                                         sdkConfigurationName: sdkName,
+                                                         emailPublisher: emailPublisher)
         }
         
         /// View that encapsulates management of view and view's state
-        /// - Parameter viewModel: ``OwnID.FlowsSDK.RegisterView.ViewModel``
-        /// - Parameter email: displayed when loggin in
         public static func createRegisterView(viewModel: OwnID.FlowsSDK.RegisterView.ViewModel,
-                                              email: Binding<String>,
                                               visualConfig: OwnID.UISDK.VisualLookConfig = .init()) -> OwnID.FlowsSDK.RegisterView {
-            OwnID.FlowsSDK.RegisterView(viewModel: viewModel,
-                                        usersEmail: email,
-                                        visualConfig: visualConfig)
+            OwnID.FlowsSDK.RegisterView(viewModel: viewModel, visualConfig: visualConfig)
         }
         
         /// Creates view model for log in flow in Gigya and manages ``OwnID.FlowsSDK.RegisterView``
         /// - Parameters:
         ///   - instance: Instance of Gigya SDK (with custom schema if needed)
-        /// - Returns: View model for log in
-        public static func loginViewModel<T: GigyaAccountProtocol>(instance: GigyaCore<T>,
-                                                                   sdkName: String = sdkName) -> OwnID.FlowsSDK.LoginView.ViewModel {
-            let performer = LoginPerformer(instance: instance,
-                                           sdkConfigurationName: sdkName)
+        public static func loginViewModel<T: GigyaAccountProtocol>(instance: GigyaCore<T>) -> OwnID.FlowsSDK.LoginView.ViewModel {
+            let performer = LoginPerformer(instance: instance)
             return OwnID.FlowsSDK.LoginView.ViewModel(loginPerformer: performer,
                                                       sdkConfigurationName: sdkName)
         }
