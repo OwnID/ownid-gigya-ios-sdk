@@ -50,12 +50,11 @@ public extension OwnID {
         
         // MARK: View Model Flows
         
-        /// Creates view model for register flow to manage ``OwnID.FlowsSDK.RegisterView``
+        /// Creates view model for register flow to manage `OwnID.FlowsSDK.RegisterView`
         /// - Parameters:
         ///   - instance: Instance of Gigya SDK (with custom schema if needed)
-        ///   - emailPublisher: creates account for this user ID
         public static func registrationViewModel<T: GigyaAccountProtocol>(instance: GigyaCore<T>,
-                                                                          emailPublisher: AnyPublisher<String, Never>) -> OwnID.FlowsSDK.RegisterView.ViewModel {
+                                                                          emailPublisher: OwnID.CoreSDK.EmailPublisher) -> OwnID.FlowsSDK.RegisterView.ViewModel {
             let performer = Registration.Performer(instance: instance, sdkConfigurationName: sdkName)
             let performerLogin = LoginPerformer(instance: instance)
             return OwnID.FlowsSDK.RegisterView.ViewModel(registrationPerformer: performer,
@@ -64,24 +63,22 @@ public extension OwnID {
                                                          emailPublisher: emailPublisher)
         }
         
-        /// View that encapsulates management of view and view's state
         public static func createRegisterView(viewModel: OwnID.FlowsSDK.RegisterView.ViewModel,
                                               visualConfig: OwnID.UISDK.VisualLookConfig = .init()) -> OwnID.FlowsSDK.RegisterView {
             OwnID.FlowsSDK.RegisterView(viewModel: viewModel, visualConfig: visualConfig)
         }
         
-        ///
+        /// Creates view model for login flow to manage `OwnID.FlowsSDK.LoginView`
         /// - Parameters:
         ///   - instance: Instance of Gigya SDK (with custom schema if needed)
         public static func loginViewModel<T: GigyaAccountProtocol>(instance: GigyaCore<T>,
-                                                                   emailPublisher: AnyPublisher<String, Never>) -> OwnID.FlowsSDK.LoginView.ViewModel {
+                                                                   emailPublisher: OwnID.CoreSDK.EmailPublisher) -> OwnID.FlowsSDK.LoginView.ViewModel {
             let performer = LoginPerformer(instance: instance)
             return OwnID.FlowsSDK.LoginView.ViewModel(loginPerformer: performer,
                                                       sdkConfigurationName: sdkName,
                                                       emailPublisher: emailPublisher)
         }
         
-        /// 
         public static func createLoginView(viewModel: OwnID.FlowsSDK.LoginView.ViewModel,
                                            visualConfig: OwnID.UISDK.VisualLookConfig = .init()) -> OwnID.FlowsSDK.LoginView {
             OwnID.FlowsSDK.LoginView(viewModel: viewModel, visualConfig: visualConfig)
