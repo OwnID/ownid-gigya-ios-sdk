@@ -70,26 +70,21 @@ public extension OwnID {
             OwnID.FlowsSDK.RegisterView(viewModel: viewModel, visualConfig: visualConfig)
         }
         
-        /// Creates view model for log in flow in Gigya and manages ``OwnID.FlowsSDK.RegisterView``
+        ///
         /// - Parameters:
         ///   - instance: Instance of Gigya SDK (with custom schema if needed)
-        public static func loginViewModel<T: GigyaAccountProtocol>(instance: GigyaCore<T>) -> OwnID.FlowsSDK.LoginView.ViewModel {
+        public static func loginViewModel<T: GigyaAccountProtocol>(instance: GigyaCore<T>,
+                                                                   emailPublisher: AnyPublisher<String, Never>) -> OwnID.FlowsSDK.LoginView.ViewModel {
             let performer = LoginPerformer(instance: instance)
             return OwnID.FlowsSDK.LoginView.ViewModel(loginPerformer: performer,
-                                                      sdkConfigurationName: sdkName)
+                                                      sdkConfigurationName: sdkName,
+                                                      emailPublisher: emailPublisher)
         }
         
-        /// View that encapsulates management of ``OwnID.SkipPasswordView`` state
-        /// - Parameter viewModel: ``OwnID.LoginView.ViewModel``
-        /// - Parameter usersEmail: Email to be used in link on login and displayed when loggin in
-        /// - Parameter visualConfig: contains information about how views will look like
-        /// - Returns: View to display
+        /// 
         public static func createLoginView(viewModel: OwnID.FlowsSDK.LoginView.ViewModel,
-                                           usersEmail: Binding<String>,
                                            visualConfig: OwnID.UISDK.VisualLookConfig = .init()) -> OwnID.FlowsSDK.LoginView {
-            OwnID.FlowsSDK.LoginView(viewModel: viewModel,
-                                     usersEmail: usersEmail,
-                                     visualConfig: visualConfig)
+            OwnID.FlowsSDK.LoginView(viewModel: viewModel, visualConfig: visualConfig)
         }
     }
 }
