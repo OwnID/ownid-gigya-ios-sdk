@@ -13,9 +13,7 @@ public extension OwnID {
         
         // MARK: Setup
         
-        public static func info() -> OwnID.CoreSDK.SDKInformation {
-            (sdkName, version)
-        }
+        public static func info() -> OwnID.CoreSDK.SDKInformation { (sdkName, version) }
         
         /// Standard configuration, searches for default .plist file
         public static func configure(supportedLanguages: OwnID.CoreSDK.Languages = .init(rawValue: Locale.preferredLanguages)) {
