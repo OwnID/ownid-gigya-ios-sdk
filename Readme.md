@@ -52,7 +52,7 @@ When the application starts, the OwnID SDK automatically reads `OwnIDConfigurati
 	<key>OwnIDRedirectionURL</key>
 	<string>com.myapp.demo://bazco</string>
 	<key>OwnIDAppID</key>
-	<string>4tb9nt6iaur0zv</string>
+	<string>l16tzgmvvyf5qn</string>
 </dict>
 </plist>
 ```
@@ -239,16 +239,12 @@ Inserting the OwnID view into your View layer results in the Skip Password optio
 //Put LoginView inside your main view, preferably below password field
 var body: some View {
   //...
-  // User's email binding `$viewModel.email` is used to display identity
-  // name when logging in. Additionally, this email is used to get
-  // information if user already has OwnID account
   OwnID.GigyaSDK.createLoginView(viewModel: viewModel.ownIDViewModel)
   //...
 }
 ```
 
 By default, tooltip popup will appear every time login view is shown.
-Use `shouldShowTooltip` to disable tooltip appear of tooltip completely. To do this, use assign `false`.
 
 ## Errors
 All errors from the SDK have an `OwnID.CoreSDK.Error` type. You can use them, for example, to properly ask the user to perform an action.
