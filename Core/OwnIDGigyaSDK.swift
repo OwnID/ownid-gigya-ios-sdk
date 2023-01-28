@@ -13,17 +13,14 @@ public extension OwnID {
         
         // MARK: Setup
         
-        public static func info() -> OwnID.CoreSDK.SDKInformation {
-            (sdkName, version)
-        }
+        public static func info() -> OwnID.CoreSDK.SDKInformation { (sdkName, version) }
         
-        /// Standart configuration, searches for default .plist file
+        /// Standard configuration, searches for default .plist file
         public static func configure(supportedLanguages: OwnID.CoreSDK.Languages = .init(rawValue: Locale.preferredLanguages)) {
             OwnID.CoreSDK.shared.configure(userFacingSDK: info(), underlyingSDKs: [], supportedLanguages: supportedLanguages)
         }
         
-        /// Configures SDK from URL
-        /// - Parameter plistUrl: Config plist URL
+        /// Configures SDK from plist path URL
         public static func configure(plistUrl: URL,
                                      supportedLanguages: OwnID.CoreSDK.Languages = .init(rawValue: Locale.preferredLanguages)) {
             OwnID.CoreSDK.shared.configureFor(plistUrl: plistUrl,
@@ -32,12 +29,8 @@ public extension OwnID {
                                               supportedLanguages: supportedLanguages)
         }
         
-        /// Configures SDK from parameters
-        /// - Parameters:
-        ///   - serverURL: ServerURL
-        ///   - redirectionURL: RedirectionURL
-        public static func configure(appID: String,
-                                     redirectionURL: String,
+        public static func configure(appID: OwnID.CoreSDK.AppID,
+                                     redirectionURL: OwnID.CoreSDK.RedirectionURLString,
                                      environment: String? = .none,
                                      supportedLanguages: OwnID.CoreSDK.Languages = .init(rawValue: Locale.preferredLanguages)) {
             OwnID.CoreSDK.shared.configure(appID: appID,
@@ -48,64 +41,47 @@ public extension OwnID {
                                            supportedLanguages: supportedLanguages)
         }
         
-        /// Used to handle the redirects from browser after webapp is finished
-        /// - Parameter url: URL returned from webapp after it has finished
-        public static func handle(url: URL) {
-            OwnID.CoreSDK.shared.handle(url: url, sdkConfigurationName: sdkName)
+        /// Handles redirects from other flows back to the app
+        public static func handle(url: URL, sdkConfigurationName: String = sdkName) {
+            OwnID.CoreSDK.shared.handle(url: url, sdkConfigurationName: sdkConfigurationName)
         }
         
         // MARK: View Model Flows
         
-        /// Creates view model for register flow in Gigya and manages ``OwnID.FlowsSDK.RegisterView``
+        /// Creates view model for register flow to manage `OwnID.FlowsSDK.RegisterView`
         /// - Parameters:
         ///   - instance: Instance of Gigya SDK (with custom schema if needed)
-        /// - Returns: View model for register flow
         public static func registrationViewModel<T: GigyaAccountProtocol>(instance: GigyaCore<T>,
-                                                                          sdkName: String = sdkName) -> OwnID.FlowsSDK.RegisterView.ViewModel {
+                                                                          emailPublisher: OwnID.CoreSDK.EmailPublisher,
+                                                                          sdkConfigurationName: String = sdkName) -> OwnID.FlowsSDK.RegisterView.ViewModel {
             let performer = Registration.Performer(instance: instance, sdkConfigurationName: sdkName)
-            let performerLogin = LoginPerformer(instance: instance,
-                                                sdkConfigurationName: sdkName)
+            let performerLogin = LoginPerformer(instance: instance)
             return OwnID.FlowsSDK.RegisterView.ViewModel(registrationPerformer: performer,
                                                          loginPerformer: performerLogin,
-                                                         sdkConfigurationName: sdkName)
+                                                         sdkConfigurationName: sdkConfigurationName,
+                                                         emailPublisher: emailPublisher)
         }
         
-        /// View that encapsulates management of ``OwnID.SkipPasswordView`` state
-        /// - Parameter viewModel: ``OwnID.FlowsSDK.RegisterView.ViewModel``
-        /// - Parameter email: email to be used in link on login and displayed when loggin in
-        /// - Parameter visualConfig: contains information about how views will look like
-        /// - Returns: View to display
         public static func createRegisterView(viewModel: OwnID.FlowsSDK.RegisterView.ViewModel,
-                                              email: Binding<String>,
                                               visualConfig: OwnID.UISDK.VisualLookConfig = .init()) -> OwnID.FlowsSDK.RegisterView {
-            OwnID.FlowsSDK.RegisterView(viewModel: viewModel,
-                                        usersEmail: email,
-                                        visualConfig: visualConfig)
+            OwnID.FlowsSDK.RegisterView(viewModel: viewModel, visualConfig: visualConfig)
         }
         
-        /// Creates view model for log in flow in Gigya and manages ``OwnID.FlowsSDK.RegisterView``
+        /// Creates view model for login flow to manage `OwnID.FlowsSDK.LoginView`
         /// - Parameters:
         ///   - instance: Instance of Gigya SDK (with custom schema if needed)
-        /// - Returns: View model for log in
         public static func loginViewModel<T: GigyaAccountProtocol>(instance: GigyaCore<T>,
-                                                                   sdkName: String = sdkName) -> OwnID.FlowsSDK.LoginView.ViewModel {
-            let performer = LoginPerformer(instance: instance,
-                                           sdkConfigurationName: sdkName)
+                                                                   emailPublisher: OwnID.CoreSDK.EmailPublisher,
+                                                                   sdkConfigurationName: String = sdkName) -> OwnID.FlowsSDK.LoginView.ViewModel {
+            let performer = LoginPerformer(instance: instance)
             return OwnID.FlowsSDK.LoginView.ViewModel(loginPerformer: performer,
-                                                      sdkConfigurationName: sdkName)
+                                                      sdkConfigurationName: sdkConfigurationName,
+                                                      emailPublisher: emailPublisher)
         }
         
-        /// View that encapsulates management of ``OwnID.SkipPasswordView`` state
-        /// - Parameter viewModel: ``OwnID.LoginView.ViewModel``
-        /// - Parameter usersEmail: Email to be used in link on login and displayed when loggin in
-        /// - Parameter visualConfig: contains information about how views will look like
-        /// - Returns: View to display
         public static func createLoginView(viewModel: OwnID.FlowsSDK.LoginView.ViewModel,
-                                           usersEmail: Binding<String>,
                                            visualConfig: OwnID.UISDK.VisualLookConfig = .init()) -> OwnID.FlowsSDK.LoginView {
-            OwnID.FlowsSDK.LoginView(viewModel: viewModel,
-                                     usersEmail: usersEmail,
-                                     visualConfig: visualConfig)
+            OwnID.FlowsSDK.LoginView(viewModel: viewModel, visualConfig: visualConfig)
         }
     }
 }
