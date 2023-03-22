@@ -83,5 +83,17 @@ public extension OwnID {
                                            visualConfig: OwnID.UISDK.VisualLookConfig = .init()) -> OwnID.FlowsSDK.LoginView {
             OwnID.FlowsSDK.LoginView(viewModel: viewModel, visualConfig: visualConfig)
         }
+        
+        public static func showInstantConnectView<T: GigyaAccountProtocol>(instance: GigyaCore<T>,
+                                                                           sdkConfigurationName: String = sdkName) {
+            let emailPublisher = PassthroughSubject<String, Never>()
+            let view = OwnID.UISDK.InstantConnectView(emailPublisher: emailPublisher)
+            let performer = LoginPerformer(instance: instance)
+            let viewModel = OwnID.FlowsSDK.LoginView.ViewModel(loginPerformer: performer,
+                                                               sdkConfigurationName: sdkConfigurationName,
+                                                               emailPublisher: emailPublisher.eraseToAnyPublisher())
+            viewModel.subscribe(to: view.eventPublisher)
+            #warning("display view somehow here o top of other views")
+        }
     }
 }
