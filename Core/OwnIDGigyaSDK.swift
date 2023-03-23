@@ -84,16 +84,22 @@ public extension OwnID {
             OwnID.FlowsSDK.LoginView(viewModel: viewModel, visualConfig: visualConfig)
         }
         
-        public static func showInstantConnectView<T: GigyaAccountProtocol>(instance: GigyaCore<T>,
-                                                                           sdkConfigurationName: String = sdkName) {
-            let emailPublisher = PassthroughSubject<String, Never>()
-            let view = OwnID.UISDK.InstantConnectView(emailPublisher: emailPublisher)
+        public static func instantConncectViewModel<T: GigyaAccountProtocol>(instance: GigyaCore<T>,
+                                                                             sdkConfigurationName: String = sdkName) -> OwnID.FlowsSDK.LoginView.ViewModel {
             let performer = LoginPerformer(instance: instance)
             let viewModel = OwnID.FlowsSDK.LoginView.ViewModel(loginPerformer: performer,
                                                                sdkConfigurationName: sdkConfigurationName,
-                                                               emailPublisher: emailPublisher.eraseToAnyPublisher())
+                                                               emailPublisher: Just("").eraseToAnyPublisher())
+            return viewModel
+        }
+        
+        public static func showInstantConnectView<Content: View>(viewModel: OwnID.FlowsSDK.LoginView.ViewModel,
+                                                                 @ViewBuilder content: @escaping () -> Content,
+                                                                 sdkConfigurationName: String = sdkName) {
+            let emailPublisher = PassthroughSubject<String, Never>()
+            let view = OwnID.UISDK.InstantConnectView(emailPublisher: emailPublisher, content: content)
+            viewModel.updateEmailPublisher(emailPublisher.eraseToAnyPublisher())
             viewModel.subscribe(to: view.eventPublisher)
-            #warning("display view somehow here o top of other views")
         }
     }
 }
