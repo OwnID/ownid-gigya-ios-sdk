@@ -93,17 +93,14 @@ public extension OwnID {
             return viewModel
         }
         
-        public static func createInstantConnectView<Content: View>(viewModel: OwnID.FlowsSDK.LoginView.ViewModel,
-                                                                 @ViewBuilder content: @escaping () -> Content,
+        public static func showInstantConnectView(viewModel: OwnID.FlowsSDK.LoginView.ViewModel,
                                                                  sdkConfigurationName: String = sdkName,
-                                                                   visualConfig: OwnID.UISDK.VisualLookConfig = .init()) -> OwnID.UISDK.InstantConnectView<Content> {
+                                                                   visualConfig: OwnID.UISDK.VisualLookConfig = .init()) {
             let emailPublisher = PassthroughSubject<String, Never>()
-            let view = OwnID.UISDK.InstantConnectView(emailPublisher: emailPublisher,
-                                                      visualConfig: visualConfig,
-                                                      content: content)
+            let view = OwnID.UISDK.InstantConnectView.displayInstantConnectView(emailPublisher: emailPublisher,
+                                                                                visualConfig: visualConfig)
             viewModel.updateEmailPublisher(emailPublisher.eraseToAnyPublisher())
             viewModel.subscribe(to: view.eventPublisher)
-            return view
         }
     }
 }
