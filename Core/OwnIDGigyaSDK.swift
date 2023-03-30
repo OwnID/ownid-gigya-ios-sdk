@@ -98,6 +98,7 @@ public extension OwnID {
                                                   visualConfig: OwnID.UISDK.VisualLookConfig = .init()) {
             let emailPublisher = PassthroughSubject<String, Never>()
             let view = OwnID.UISDK.InstantConnectView.displayInstantConnectView(emailPublisher: emailPublisher,
+                                                                                viewModel: viewModel,
                                                                                 visualConfig: visualConfig)
             viewModel.updateEmailPublisher(emailPublisher.eraseToAnyPublisher())
             viewModel.subscribe(to: view.eventPublisher)
