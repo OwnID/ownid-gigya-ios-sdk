@@ -94,8 +94,8 @@ public extension OwnID {
         }
         
         public static func showInstantConnectView(viewModel: OwnID.FlowsSDK.LoginView.ViewModel,
-                                                                 sdkConfigurationName: String = sdkName,
-                                                                   visualConfig: OwnID.UISDK.VisualLookConfig = .init()) {
+                                                  sdkConfigurationName: String = sdkName,
+                                                  visualConfig: OwnID.UISDK.VisualLookConfig = .init()) {
             let emailPublisher = PassthroughSubject<String, Never>()
             let view = OwnID.UISDK.InstantConnectView.displayInstantConnectView(emailPublisher: emailPublisher,
                                                                                 visualConfig: visualConfig)
