@@ -96,8 +96,21 @@ public extension OwnID {
         public static func showInstantConnectView(viewModel: OwnID.FlowsSDK.LoginView.ViewModel,
                                                   sdkConfigurationName: String = sdkName,
                                                   visualConfig: OwnID.UISDK.VisualLookConfig = .init()) {
-            let view = OwnID.UISDK.InstantConnectView.displayInstantConnectView(viewModel: viewModel,
-                                                                                visualConfig: visualConfig)
+            let view = OwnID.UISDK.InstantConnectView(viewModel: viewModel, visualConfig: visualConfig, closeClosure: {
+                if #available(iOS 15.0, *) {
+                    PopupManager.dismiss()
+                }
+            })
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                if #available(iOS 15.0, *) {
+                    PopupManager.present(view)
+                    
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                        PopupManager.dismiss()
+                    }
+                }
+            }
         }
     }
 }
