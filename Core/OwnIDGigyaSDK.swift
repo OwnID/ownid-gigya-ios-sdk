@@ -98,18 +98,11 @@ public extension OwnID {
                                                   visualConfig: OwnID.UISDK.VisualLookConfig = .init()) {
             let view = OwnID.UISDK.InstantConnectView(viewModel: viewModel, visualConfig: visualConfig, closeClosure: {
                 if #available(iOS 15.0, *) {
-                    PopupManager.dismiss()
+                    OwnID.UISDK.PopupManager.dismiss()
                 }
             })
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                if #available(iOS 15.0, *) {
-                    PopupManager.present(view)
-                    
-                    
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                        PopupManager.dismiss()
-                    }
-                }
+            if #available(iOS 15.0, *) {
+                OwnID.UISDK.PopupManager.present(view)
             }
         }
     }
