@@ -86,11 +86,7 @@ public extension OwnID {
         
         public static func instantConncectViewModel<T: GigyaAccountProtocol>(instance: GigyaCore<T>,
                                                                              sdkConfigurationName: String = sdkName) -> OwnID.FlowsSDK.LoginView.ViewModel {
-            let performer = LoginPerformer(instance: instance)
-            let viewModel = OwnID.FlowsSDK.LoginView.ViewModel(loginPerformer: performer,
-                                                               sdkConfigurationName: sdkConfigurationName,
-                                                               emailPublisher: Just("").eraseToAnyPublisher())
-            return viewModel
+            loginViewModel(instance: instance, emailPublisher: Just("").eraseToAnyPublisher())
         }
         
         public static func showInstantConnectView(viewModel: OwnID.FlowsSDK.LoginView.ViewModel,
