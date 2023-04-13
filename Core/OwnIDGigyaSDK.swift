@@ -88,7 +88,6 @@ public extension OwnID {
                                                   sdkConfigurationName: String = sdkName,
                                                   visualConfig: OwnID.UISDK.VisualLookConfig = .init()) {
             OwnID.UISDK.showInstantConnectView(viewModel: viewModel,
-                                               sdkConfigurationName: sdkConfigurationName,
                                                visualConfig: visualConfig)
         }
     }
