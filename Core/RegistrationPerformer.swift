@@ -46,7 +46,6 @@ extension OwnID.GigyaSDK.Registration {
                 promise(.failure(.coreLog(entry: .errorEntry(context: configuration.payload.context, Self.self), error: .plugin(underlying: error))))
             }
             
-            guard configuration.email.isValid else { handle(error: .emailIsNotValid); return }
             let gigyaParameters = parameters as? OwnID.GigyaSDK.Registration.Parameters ?? OwnID.GigyaSDK.Registration.Parameters(parameters: [:])
             guard let metadata = configuration.payload.metadata,
                   let dataField = (metadata as? [String: Any])?["dataField"] as? String
@@ -61,7 +60,7 @@ extension OwnID.GigyaSDK.Registration {
                 addLocaleToParams(locale: language, params: &registerParams)
             }
             
-            instance.register(email: configuration.email.rawValue,
+            instance.register(email: configuration.loginId,
                               password: OwnID.FlowsSDK.Password.generatePassword().passwordString,
                               params: registerParams
             ) { result in
