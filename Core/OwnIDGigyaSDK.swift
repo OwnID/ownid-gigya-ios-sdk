@@ -52,14 +52,14 @@ public extension OwnID {
         /// - Parameters:
         ///   - instance: Instance of Gigya SDK (with custom schema if needed)
         public static func registrationViewModel<T: GigyaAccountProtocol>(instance: GigyaCore<T>,
-                                                                          emailPublisher: OwnID.CoreSDK.EmailPublisher,
+                                                                          loginIdPublisher: OwnID.CoreSDK.LoginIdPublisher,
                                                                           sdkConfigurationName: String = sdkName) -> OwnID.FlowsSDK.RegisterView.ViewModel {
             let performer = Registration.Performer(instance: instance, sdkConfigurationName: sdkName)
             let performerLogin = LoginPerformer(instance: instance)
             return OwnID.FlowsSDK.RegisterView.ViewModel(registrationPerformer: performer,
                                                          loginPerformer: performerLogin,
                                                          sdkConfigurationName: sdkConfigurationName,
-                                                         emailPublisher: emailPublisher)
+                                                         loginIdPublisher: loginIdPublisher)
         }
         
         public static func createRegisterView(viewModel: OwnID.FlowsSDK.RegisterView.ViewModel,
@@ -71,12 +71,12 @@ public extension OwnID {
         /// - Parameters:
         ///   - instance: Instance of Gigya SDK (with custom schema if needed)
         public static func loginViewModel<T: GigyaAccountProtocol>(instance: GigyaCore<T>,
-                                                                   emailPublisher: OwnID.CoreSDK.EmailPublisher,
+                                                                   loginIdPublisher: OwnID.CoreSDK.LoginIdPublisher,
                                                                    sdkConfigurationName: String = sdkName) -> OwnID.FlowsSDK.LoginView.ViewModel {
             let performer = LoginPerformer(instance: instance)
             return OwnID.FlowsSDK.LoginView.ViewModel(loginPerformer: performer,
                                                       sdkConfigurationName: sdkConfigurationName,
-                                                      emailPublisher: emailPublisher)
+                                                      loginIdPublisher: loginIdPublisher)
         }
         
         public static func createLoginView(viewModel: OwnID.FlowsSDK.LoginView.ViewModel,
