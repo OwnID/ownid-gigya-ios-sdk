@@ -64,6 +64,11 @@ extension OwnID.GigyaSDK {
 }
 
 extension OwnID.GigyaSDK {
+    private struct Constants {
+        static let errorKey = "errorJson"
+        static let sessionInfoKey = "sessionInfo"
+    }
+    
     enum LogIn {
         static func logIn<T: GigyaAccountProtocol>(instance: GigyaCore<T>, payload: OwnID.CoreSDK.Payload) -> EventPublisher {
             Future<OwnID.LoginResult, OwnID.CoreSDK.CoreErrorLogWrapper> { promise in
@@ -71,14 +76,14 @@ extension OwnID.GigyaSDK {
                     promise(.failure(.coreLog(entry: .errorEntry(context: payload.context, Self.self), error: .plugin(underlying: error))))
                 }
                 guard let data = payload.dataContainer as? [String: Any] else { handle(error: .cannotParseSession); return }
-                if let errorString = data["errorJson"] as? String,
+                if let errorString = data[Constants.errorKey] as? String,
                    let errorData = errorString.data(using: .utf8),
                    let errorMetadata = try? JSONDecoder().decode(ErrorMetadata.self, from: errorData) {
                     ErrorMapper<T>.mapLoginError(errorCode: errorMetadata.errorCode ?? 0, context: payload.context, authType: payload.authType)
                     handle(error: .accountNeedsVerification(errorMetadata: errorMetadata))
                     return
                 }
-                guard let sessionData = data["sessionInfo"] as? [String: Any],
+                guard let sessionData = data[Constants.sessionInfoKey] as? [String: Any],
                     let jsonData = try? JSONSerialization.data(withJSONObject: sessionData),
                 let sessionInfo = try? JSONDecoder().decode(SessionInfo.self, from: jsonData)
                 else { handle(error: .cannotParseSession); return }
