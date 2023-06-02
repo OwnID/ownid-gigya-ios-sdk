@@ -12,7 +12,7 @@ extension OwnID.GigyaSDK {
             self.instance = instance
         }
         
-        func login(payload: OwnID.CoreSDK.Payload, email: String) -> AnyPublisher<OwnID.LoginResult, OwnID.CoreSDK.CoreErrorLogWrapper> {
+        func login(payload: OwnID.CoreSDK.Payload, loginId: String) -> AnyPublisher<OwnID.LoginResult, OwnID.CoreSDK.CoreErrorLogWrapper> {
             OwnID.GigyaSDK.LogIn.logIn(instance: instance, payload: payload)
                 .map { $0 as OwnID.LoginResult }
                 .eraseToAnyPublisher()
