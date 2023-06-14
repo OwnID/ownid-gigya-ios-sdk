@@ -8,9 +8,10 @@ extension OwnID.GigyaSDK {
             case .gigyaError(let data):
                 let gigyaError = data.errorCode
                 if allowedActionsErrorCodes().contains(gigyaError) {
-                    OwnID.CoreSDK.logger.logAnalytic(.registerTrackMetric(action: .registered,
-                                                                          context: context,
-                                                                          authType: authType))
+                    OwnID.CoreSDK.eventService.sendMetric(.trackMetric(action: .registered,
+                                                                       category: .registration,
+                                                                       context: context,
+                                                                       authType: authType))
                 }
                 
             default:
@@ -20,7 +21,8 @@ extension OwnID.GigyaSDK {
         
         static func mapLoginError(errorCode: Int, context: String?, authType: String?) {
             if allowedActionsErrorCodes().contains(errorCode) {
-                OwnID.CoreSDK.logger.logAnalytic(.loginTrackMetric(action: .loggedIn,
+                OwnID.CoreSDK.eventService.sendMetric(.trackMetric(action: .loggedIn,
+                                                                   category: .login,
                                                                    context: context,
                                                                    authType: authType))
             }
