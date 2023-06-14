@@ -64,7 +64,7 @@ extension OwnID.GigyaSDK {
 }
 
 extension OwnID.GigyaSDK {
-    private struct Constants {
+    private enum Constants {
         static let errorKey = "errorJson"
         static let sessionInfoKey = "sessionInfo"
     }
@@ -93,7 +93,7 @@ extension OwnID.GigyaSDK {
                                               expiration: sessionInfo.expiration) {
                     
                     instance.setSession(session)
-                    OwnID.CoreSDK.logger.logCore(.entry(context: payload.context, Self.self))
+                    OwnID.CoreSDK.logger.log(.entry(context: payload.context, level: .debug, Self.self))
                     promise(.success(OwnID.LoginResult(operationResult: VoidOperationResult(), authType: payload.authType)))
                 } else {
                     handle(error: .cannotInitSession)
