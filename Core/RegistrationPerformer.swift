@@ -77,6 +77,7 @@ extension OwnID.GigyaSDK.Registration {
                 case .failure(let error):
                     OwnID.GigyaSDK.ErrorMapper.mapRegistrationError(error: error,
                                                                     context: configuration.payload.context,
+                                                                    loginId: configuration.loginId,
                                                                     authType: configuration.payload.authType)
                     handle(error: .login(error: error))
                 }
