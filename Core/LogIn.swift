@@ -79,7 +79,10 @@ extension OwnID.GigyaSDK {
                 if let errorString = data[Constants.errorKey] as? String,
                    let errorData = errorString.data(using: .utf8),
                    let errorMetadata = try? JSONDecoder().decode(ErrorMetadata.self, from: errorData) {
-                    ErrorMapper<T>.mapLoginError(errorCode: errorMetadata.errorCode ?? 0, context: payload.context, authType: payload.authType)
+                    ErrorMapper<T>.mapLoginError(errorCode: errorMetadata.errorCode ?? 0,
+                                                 context: payload.context,
+                                                 loginId: payload.loginId,
+                                                 authType: payload.authType)
                     handle(error: .accountNeedsVerification(errorMetadata: errorMetadata))
                     return
                 }
