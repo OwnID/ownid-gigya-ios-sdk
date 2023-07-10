@@ -42,14 +42,18 @@ extension OwnID.GigyaSDK.Registration {
                                                   configuration: OwnID.FlowsSDK.RegistrationConfiguration,
                                                   parameters: RegisterParameters) -> PublisherType {
         Future<OwnID.RegisterResult, OwnID.CoreSDK.CoreErrorLogWrapper> { promise in
-            func handle(error: OwnID.GigyaSDK.Error<T>) {
-                promise(.failure(.coreLog(entry: .errorEntry(context: configuration.payload.context, Self.self), error: .plugin(underlying: error))))
+            func handle(error: OwnID.CoreSDK.Error) {
+                promise(.failure(.coreLog(entry: .errorEntry(context: configuration.payload.context, Self.self), error: error)))
             }
             
             let gigyaParameters = parameters as? OwnID.GigyaSDK.Registration.Parameters ?? OwnID.GigyaSDK.Registration.Parameters(parameters: [:])
             guard let metadata = configuration.payload.metadata,
                   let dataField = (metadata as? [String: Any])?["dataField"] as? String
-            else { handle(error: .cannotParseRegistrationMetadataParameter); return }
+            else {
+                let mesage = OwnID.GigyaSDK.ErrorMessage.cannotParseRegistrationMetadataParameter
+                handle(error: .internalError(message: mesage))
+                return
+            }
             
             var registerParams = gigyaParameters.parameters
             let ownIDParameters = [dataField: configuration.payload.dataContainer]
@@ -79,7 +83,7 @@ extension OwnID.GigyaSDK.Registration {
                                                                     context: configuration.payload.context,
                                                                     loginId: configuration.loginId,
                                                                     authType: configuration.payload.authType)
-                    handle(error: .login(error: error))
+                    handle(error: .integrationError(underlying: error.error))
                 }
             }
         }
