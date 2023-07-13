@@ -50,8 +50,8 @@ extension OwnID.GigyaSDK.Registration {
             guard let metadata = configuration.payload.metadata,
                   let dataField = (metadata as? [String: Any])?["dataField"] as? String
             else {
-                let mesage = OwnID.GigyaSDK.ErrorMessage.cannotParseRegistrationMetadataParameter
-                handle(error: .internalError(message: mesage))
+                let message = OwnID.GigyaSDK.ErrorMessage.cannotParseRegistrationMetadataParameter
+                handle(error: .userError(errorModel: OwnID.CoreSDK.UserErrorModel(message: message)))
                 return
             }
             
