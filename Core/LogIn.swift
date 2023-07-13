@@ -76,7 +76,7 @@ extension OwnID.GigyaSDK {
                     promise(.failure(.coreLog(entry: .errorEntry(context: payload.context, Self.self), error: error)))
                 }
                 guard let data = payload.dataContainer as? [String: Any] else {
-                    handle(error: .internalError(message: ErrorMessage.cannotParseSession))
+                    handle(error: .userError(errorModel: OwnID.CoreSDK.UserErrorModel(message: ErrorMessage.cannotParseSession)))
                     return
                 }
                 if let errorString = data[Constants.errorKey] as? String,
@@ -86,13 +86,13 @@ extension OwnID.GigyaSDK {
                                                  context: payload.context,
                                                  loginId: payload.loginId,
                                                  authType: payload.authType)
-                    handle(error: .internalError(message: ErrorMessage.accountNeedsVerification))
+                    handle(error: .userError(errorModel: OwnID.CoreSDK.UserErrorModel(message: ErrorMessage.accountNeedsVerification)))
                     return
                 }
                 guard let sessionData = data[Constants.sessionInfoKey] as? [String: Any],
                       let jsonData = try? JSONSerialization.data(withJSONObject: sessionData),
                       let sessionInfo = try? JSONDecoder().decode(SessionInfo.self, from: jsonData) else {
-                    handle(error: .internalError(message: ErrorMessage.cannotParseSession))
+                    handle(error: .userError(errorModel: OwnID.CoreSDK.UserErrorModel(message: ErrorMessage.cannotParseSession)))
                     return
                 }
                 
@@ -104,7 +104,7 @@ extension OwnID.GigyaSDK {
                     OwnID.CoreSDK.logger.log(.entry(context: payload.context, level: .debug, Self.self))
                     promise(.success(OwnID.LoginResult(operationResult: VoidOperationResult(), authType: payload.authType)))
                 } else {
-                    handle(error: .internalError(message: ErrorMessage.cannotInitSession))
+                    handle(error: .userError(errorModel: OwnID.CoreSDK.UserErrorModel(message: ErrorMessage.cannotInitSession)))
                 }
             }
             .eraseToAnyPublisher()
