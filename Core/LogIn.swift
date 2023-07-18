@@ -73,7 +73,7 @@ extension OwnID.GigyaSDK {
         static func logIn<T: GigyaAccountProtocol>(instance: GigyaCore<T>, payload: OwnID.CoreSDK.Payload) -> EventPublisher {
             Future<OwnID.LoginResult, OwnID.CoreSDK.CoreErrorLogWrapper> { promise in
                 func handle(error: OwnID.CoreSDK.Error) {
-                    promise(.failure(.coreLog(entry: .errorEntry(context: payload.context, Self.self), error: error)))
+                    promise(.failure(.coreLog(error: error, type: Self.self)))
                 }
                 guard let data = payload.dataContainer as? [String: Any] else {
                     handle(error: .userError(errorModel: OwnID.CoreSDK.UserErrorModel(message: ErrorMessage.cannotParseSession)))
@@ -101,7 +101,7 @@ extension OwnID.GigyaSDK {
                                               expiration: sessionInfo.expiration) {
                     
                     instance.setSession(session)
-                    OwnID.CoreSDK.logger.log(.entry(context: payload.context, level: .debug, Self.self))
+                    OwnID.CoreSDK.logger.log(level: .debug, Self.self)
                     promise(.success(OwnID.LoginResult(operationResult: VoidOperationResult(), authType: payload.authType)))
                 } else {
                     handle(error: .userError(errorModel: OwnID.CoreSDK.UserErrorModel(message: ErrorMessage.cannotInitSession)))
