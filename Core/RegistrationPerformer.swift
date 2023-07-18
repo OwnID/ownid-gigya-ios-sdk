@@ -43,7 +43,7 @@ extension OwnID.GigyaSDK.Registration {
                                                   parameters: RegisterParameters) -> PublisherType {
         Future<OwnID.RegisterResult, OwnID.CoreSDK.CoreErrorLogWrapper> { promise in
             func handle(error: OwnID.CoreSDK.Error) {
-                promise(.failure(.coreLog(entry: .errorEntry(context: configuration.payload.context, Self.self), error: error)))
+                promise(.failure(.coreLog(error: error, type: Self.self)))
             }
             
             let gigyaParameters = parameters as? OwnID.GigyaSDK.Registration.Parameters ?? OwnID.GigyaSDK.Registration.Parameters(parameters: [:])
@@ -71,10 +71,9 @@ extension OwnID.GigyaSDK.Registration {
                 switch result {
                 case .success(let account):
                     let UID = account.UID ?? ""
-                    OwnID.CoreSDK.logger.log(.entry(context: configuration.payload.context,
-                                                    level: .debug,
+                    OwnID.CoreSDK.logger.log(level: .debug,
                                                     message: "UID \(UID.logValue)",
-                                                    Self.self))
+                                                    Self.self)
                     promise(.success(OwnID.RegisterResult(operationResult: VoidOperationResult(),
                                                           authType: configuration.payload.authType)))
                     
