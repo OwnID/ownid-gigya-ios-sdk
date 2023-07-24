@@ -81,12 +81,12 @@ extension OwnID.GigyaSDK {
                 }
                 if let errorString = data[Constants.errorKey] as? String,
                    let errorData = errorString.data(using: .utf8),
-                   let errorMetadata = try? JSONDecoder().decode(ErrorMetadata.self, from: errorData) {
-                    ErrorMapper<T>.mapLoginError(errorCode: errorMetadata.errorCode ?? 0,
+                   let errorMetadata = try? JSONDecoder().decode(GigyaResponseModel.self, from: errorData) {
+                    ErrorMapper<T>.mapLoginError(errorCode: errorMetadata.errorCode,
                                                  context: payload.context,
                                                  loginId: payload.loginId,
                                                  authType: payload.authType)
-                    handle(error: .userError(errorModel: OwnID.CoreSDK.UserErrorModel(message: ErrorMessage.accountNeedsVerification)))
+                    handle(error: .integrationError(underlying: NetworkError.gigyaError(data: errorMetadata)))
                     return
                 }
                 guard let sessionData = data[Constants.sessionInfoKey] as? [String: Any],
