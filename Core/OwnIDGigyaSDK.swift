@@ -16,29 +16,29 @@ public extension OwnID {
         public static func info() -> OwnID.CoreSDK.SDKInformation { (sdkName, version) }
         
         /// Standard configuration, searches for default .plist file
-        public static func configure(supportedLanguages: OwnID.CoreSDK.Languages = .init(rawValue: Locale.preferredLanguages)) {
-            OwnID.CoreSDK.shared.configure(userFacingSDK: info(), underlyingSDKs: [], supportedLanguages: supportedLanguages)
+        public static func configure(supportedLanguages: [String] = Locale.preferredLanguages) {
+            OwnID.CoreSDK.shared.configure(userFacingSDK: info(), underlyingSDKs: [], supportedLanguages: .init(rawValue: supportedLanguages))
         }
         
         /// Configures SDK from plist path URL
         public static func configure(plistUrl: URL,
-                                     supportedLanguages: OwnID.CoreSDK.Languages = .init(rawValue: Locale.preferredLanguages)) {
+                                     supportedLanguages: [String] = Locale.preferredLanguages) {
             OwnID.CoreSDK.shared.configureFor(plistUrl: plistUrl,
                                               userFacingSDK: info(),
                                               underlyingSDKs: [],
-                                              supportedLanguages: supportedLanguages)
+                                              supportedLanguages: .init(rawValue: supportedLanguages))
         }
         
         public static func configure(appID: OwnID.CoreSDK.AppID,
                                      redirectionURL: OwnID.CoreSDK.RedirectionURLString,
                                      environment: String? = .none,
-                                     supportedLanguages: OwnID.CoreSDK.Languages = .init(rawValue: Locale.preferredLanguages)) {
+                                     supportedLanguages: [String] = Locale.preferredLanguages) {
             OwnID.CoreSDK.shared.configure(appID: appID,
                                            redirectionURL: redirectionURL,
                                            userFacingSDK: info(),
                                            underlyingSDKs: [],
                                            environment: environment,
-                                           supportedLanguages: supportedLanguages)
+                                           supportedLanguages: .init(rawValue: supportedLanguages))
         }
         
         /// Handles redirects from other flows back to the app
