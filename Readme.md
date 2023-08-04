@@ -11,7 +11,6 @@ The OwnID Gigya-iOS SDK is a client library written in Swift that provides a pas
 * [Before You Begin](#before-you-begin)
 * [Add Package Dependency](#add-package-dependency)
 * [Add Property List File to Project](#add-property-list-file-to-project)
-* [Create URL Type (Custom URL Scheme)](#create-url-type-custom-url-scheme)
 * [Import OwnID Modules](#import-ownid-module)
 * [Initialize the SDK](#initialize-the-sdk)
 * [Implement the Registration Screen](#implement-the-registration-screen)
@@ -21,11 +20,13 @@ The OwnID Gigya-iOS SDK is a client library written in Swift that provides a pas
   + [Customize View Model](#customize-view-model-1)
   + [Add OwnID View](#add-ownid-view)
 * [Errors](#errors)
-    + [Interruptions](#interruptions)
 * [Advanced Configuration](#advanced-configuration)
+  + [Logging Events](#logging-events)
   + [Alternative Syntax for Configure Function 🎛](#alternative-syntax-for-configure-function-)
+  + [OwnID Environment](#ownid-environment)
+  + [Redirection URI Alternatives](#redirection-uri-alternatives)
+  + [Button Apperance](#button-apperance)
   + [Manually Invoke OwnID Flow](#manually-invoke-ownid-flow)
-* [Logging](#logging)
 
 ## Before You Begin
 Before incorporating OwnID into your iOS app, you must create an OwnID application and integrate it with your Gigya project. For step-by-step instructions, see [OwnID-Gigya Integration Basics](gigya-integration-basics.md).
@@ -268,37 +269,9 @@ Where:
 - userError(errorModel: UserErrorModel) - Error that is intended to be reported to end user. The userMessage string from UserErrorModel is localized based on OwnID SDK language and can be used as an error message for user. 
 - integrationError(underlying: Swift.Error) - General error for wrapping Gigya errors OwnID integrates with.
 
-### Interruptions
-The following is an example of handling interruptions:
-
-[Complete example](https://github.com/OwnID/ownid-ios-sdk-demo/blob/master/GigyaDemo/RegisterViewModel.swift)
-```swift
-case .failure(let ownIDSDKError):
-    switch ownIDSDKError {
-    case .plugin(let gigyaPluginError):
-        if let gigyaSDKError = gigyaPluginError as? OwnID.GigyaSDK.Error<Your Account Protocol Of Gigya> {
-            switch gigyaSDKError {
-            case .login(let loginError):
-                switch loginError.interruption {
-                case .pendingVerification:
-                    print("pendingVerification")
-
-                default:
-                    break
-                }
-            default:
-                break
-            }
-        }
-
-    default:
-        break
-    }
-```
-
 ## Advanced Configuration
 
-### Logging
+### Logging Events
 
 OwnID SDK has a Logger that is used to log its events. You can enable Xcode console & Console.app logging by calling `OwnID.CoreSDK.logger.isEnabled = true`. To use a custom Logger, call `OwnID.CoreSDK.logger.setLogger(CustomLogger(), customTag: "CustomTag")`
 
@@ -372,7 +345,7 @@ let config = OwnID.UISDK.VisualLookConfig(buttonViewConfig: .init(iconColor: .re
 OwnID.GigyaSDK.createLoginView(viewModel: ownIDViewModel, visualConfig: config)
 ```
 
-## Manually Invoke OwnID Flow
+### Manually Invoke OwnID Flow
 As alternative to OwnID button it is possible to use custom view to call functionality. In a nutshell, here it is the same behaviour from `ownIDViewModel`, just with your custom view provided.
 
 Create simple `PassthroughSubject`. After you created custom view, on press send void action through this `PassthroughSubject`. In your `viewModel`, make `ownIDViewModel` to subscribe to this newly created publisher.
