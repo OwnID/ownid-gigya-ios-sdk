@@ -1,4 +1,4 @@
-![OwnIDSDK](./logo.svg)
+dfdsfsf![OwnIDSDK](./logo.svg)
 
 
 # OwnID Gigya-iOS SDK
@@ -323,6 +323,33 @@ case .failure(let ownIDSDKError):
         break
     }
 ```
+
+### Handling Gigya Response Data
+The following example shows how to get request data from the Gigya SDK if an error occurred
+
+```swift
+case .failure(let error):
+    switch error {
+    case .plugin(let gigyaPluginError):
+        if let gigyaSDKError = gigyaPluginError as? OwnID.GigyaSDK.Error<GigyaAccount> {
+            switch gigyaSDKError {
+            case .gigyaSDK(let error, let dataDictionary):
+                switch error {
+                case .gigyaError(let model):
+                    //handling the data
+                    print(dataDictionary)
+                    print(model.errorMessage)
+                default: break
+                }
+            default:
+                break
+            }
+        }
+
+    default:
+        break
+    }
+```        
 
 ## Advanced Configuration
 
