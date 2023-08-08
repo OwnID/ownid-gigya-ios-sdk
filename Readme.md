@@ -327,6 +327,7 @@ case .failure(let ownIDSDKError):
 ### Handling Gigya Response Data
 The following example shows how to get request data from the Gigya SDK if an error occurred
 
+[Complete example](https://github.com/OwnID/ownid-ios-sdk-demo/blob/master/GigyaDemo/LogInViewModel.swift)
 ```swift
 case .failure(let error):
     switch error {
