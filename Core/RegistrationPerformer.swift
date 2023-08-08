@@ -82,7 +82,12 @@ extension OwnID.GigyaSDK.Registration {
                                                                     context: configuration.payload.context,
                                                                     loginId: configuration.loginId,
                                                                     authType: configuration.payload.authType)
-                    handle(error: .integrationError(underlying: error.error))
+                    var json: [String: Any]?
+                    if case let .gigyaError(data) = error.error {
+                        json = data.toDictionary()
+                    }
+                    let error = OwnID.GigyaSDK.GigyaIntegrationError.login(error: error, dataDictionary: json)
+                    handle(error: .integrationError(underlying: error))
                 }
             }
         }
