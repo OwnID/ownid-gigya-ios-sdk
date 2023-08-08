@@ -22,6 +22,7 @@ The OwnID Gigya-iOS SDK is a client library written in Swift that provides a pas
   + [Add OwnID View](#add-ownid-view)
 * [Errors](#errors)
     + [Interruptions](#interruptions)
+    + [Handling Gigya Request Data](#handling-gigya-request-data)
 * [Advanced Configuration](#advanced-configuration)
   + [Alternative Syntax for Configure Function 🎛](#alternative-syntax-for-configure-function-)
   + [Manually Invoke OwnID Flow](#manually-invoke-ownid-flow)
@@ -304,6 +305,34 @@ case .failure(let ownIDSDKError):
         break
     }
 ```
+
+### Handling Gigya Request Data
+The following example shows how to get request data from the Gigya SDK if an error occurred
+
+[Complete example](https://github.com/OwnID/ownid-ios-sdk-demo/blob/master/GigyaDemo/LogInViewModel.swift)
+```swift
+case .failure(let error):
+    switch error {
+    case .plugin(let gigyaPluginError):
+        if let gigyaSDKError = gigyaPluginError as? OwnID.GigyaSDK.Error<GigyaAccount> {
+            switch gigyaSDKError {
+            case .gigyaSDK(let error, let dataDictionary):
+                switch error {
+                case .gigyaError(let model):
+                    //handling the data
+                    print(dataDictionary)
+                    print(model.errorMessage)
+                default: break
+                }
+            default:
+                break
+            }
+        }
+
+    default:
+        break
+    }
+```        
 
 ## Advanced Configuration
 
