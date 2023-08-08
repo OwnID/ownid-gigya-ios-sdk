@@ -10,13 +10,13 @@ public extension OwnID.GigyaSDK {
         static let accountNeedsVerification = "Needs account verification"
     }
     
-    enum GigyaIntegrationError<AccountType: GigyaAccountProtocol>: Swift.Error {
+    enum IntegrationError<AccountType: GigyaAccountProtocol>: Swift.Error {
         case login(error: LoginApiError<AccountType>, dataDictionary: [String: Any]?)
         case SDKError(gigyaError: NetworkError, dataDictionary: [String: Any]?)
     }
 }
 
-extension OwnID.GigyaSDK.GigyaIntegrationError: LocalizedError {
+extension OwnID.GigyaSDK.IntegrationError: LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .login(let error, _):
