@@ -5,7 +5,7 @@ import Gigya
 public extension OwnID.GigyaSDK {
     enum Error<AccountType: GigyaAccountProtocol>: PluginError {
         case login(error: LoginApiError<AccountType>)
-        case gigyaSDK(error: Swift.Error)
+        case gigyaSDK(error: NetworkError, dataDictionary: [String: Any]?)
         case badIdTokenFormat
         case UIDIsMissing
         case idTokenNotFound
@@ -15,14 +15,13 @@ public extension OwnID.GigyaSDK {
         case cannotInitSession
         case cannotParseRegistrationMetadataParameter
         case cannotParseSession
-        case accountNeedsVerification(errorMetadata: ErrorMetadata)
     }
 }
 
 extension OwnID.GigyaSDK.Error: LocalizedError {
     public var errorDescription: String? {
         switch self {
-        case .gigyaSDK(error: let error):
+        case .gigyaSDK(let error, _):
             return error.localizedDescription
         case .login(let error):
             return error.error.localizedDescription
@@ -44,8 +43,6 @@ extension OwnID.GigyaSDK.Error: LocalizedError {
             return "Registration parameters passed are invalid"
         case .cannotParseSession:
             return "Parsing error"
-        case .accountNeedsVerification:
-            return "Needs account verification"
         }
     }
 }

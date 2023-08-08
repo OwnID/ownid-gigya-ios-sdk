@@ -74,8 +74,10 @@ extension OwnID.GigyaSDK {
                 guard let data = payload.dataContainer as? [String: Any] else { handle(error: .cannotParseSession); return }
                 if let errorString = data["errorJson"] as? String,
                    let errorData = errorString.data(using: .utf8),
-                   let errorMetadata = try? JSONDecoder().decode(ErrorMetadata.self, from: errorData) {
-                    handle(error: .accountNeedsVerification(errorMetadata: errorMetadata))
+                   let errorMetadata = try? JSONDecoder().decode(GigyaResponseModel.self, from: errorData) {
+                    let gigyaError = NetworkError.gigyaError(data: errorMetadata)
+                    let json = try? JSONSerialization.jsonObject(with: errorData, options: []) as? [String: Any]
+                    handle(error: .gigyaSDK(error: gigyaError, dataDictionary: json))
                     return
                 }
                 guard let sessionData = data["sessionInfo"] as? [String: Any],
@@ -95,7 +97,11 @@ extension OwnID.GigyaSDK {
                             promise(.success(OwnID.LoginResult(operationResult: VoidOperationResult(), authType: payload.authType)))
                             
                         case .failure(let error):
-                            handle(error: .gigyaSDK(error: error))
+                            var json: [String: Any]?
+                            if case let .gigyaError(data) = error {
+                                json = data.toDictionary()
+                            }
+                            handle(error: .gigyaSDK(error: error, dataDictionary: json))
                         }
                     }
                 } else {
