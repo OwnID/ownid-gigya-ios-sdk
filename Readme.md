@@ -1,4 +1,4 @@
-dfdsfsf![OwnIDSDK](./logo.svg)
+![OwnIDSDK](./logo.svg)
 
 
 # OwnID Gigya-iOS SDK
