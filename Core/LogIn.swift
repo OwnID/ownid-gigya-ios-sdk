@@ -88,8 +88,8 @@ extension OwnID.GigyaSDK {
                                                  authType: payload.authType)
                     let gigyaError = NetworkError.gigyaError(data: errorMetadata)
                     let json = try? JSONSerialization.jsonObject(with: errorData, options: []) as? [String: Any]
-                    handle(error: .integrationError(underlying: IntegrationError<T>.SDKError(gigyaError: gigyaError,
-                                                                                             dataDictionary: json)))
+                    let error = IntegrationError.gigyaSDKError(gigyaError: gigyaError, dataDictionary: json)
+                    handle(error: .integrationError(underlying: error))
                     return
                 }
                 guard let sessionData = data[Constants.sessionInfoKey] as? [String: Any],

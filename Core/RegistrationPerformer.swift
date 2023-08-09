@@ -86,7 +86,7 @@ extension OwnID.GigyaSDK.Registration {
                     if case let .gigyaError(data) = error.error {
                         json = data.toDictionary()
                     }
-                    let error = OwnID.GigyaSDK.IntegrationError.login(error: error, dataDictionary: json)
+                    let error = OwnID.GigyaSDK.IntegrationError.gigyaSDKError(gigyaError: error.error, dataDictionary: json)
                     handle(error: .integrationError(underlying: error))
                 }
             }
