@@ -67,7 +67,7 @@ extension OwnID.GigyaSDK {
     enum LogIn {
         static func logIn<T: GigyaAccountProtocol>(instance: GigyaCore<T>, payload: OwnID.CoreSDK.Payload) -> EventPublisher {
             Future<OwnID.LoginResult, OwnID.CoreSDK.Error> { promise in
-                func handle(error: OwnID.GigyaSDK.Error<T>) {
+                func handle(error: OwnID.GigyaSDK.Error) {
                     OwnID.CoreSDK.logger.logGigya(.errorEntry(message: "error: \(error)", Self.self))
                     promise(.failure(.plugin(error: error)))
                 }
@@ -77,7 +77,7 @@ extension OwnID.GigyaSDK {
                    let errorMetadata = try? JSONDecoder().decode(GigyaResponseModel.self, from: errorData) {
                     let gigyaError = NetworkError.gigyaError(data: errorMetadata)
                     let json = try? JSONSerialization.jsonObject(with: errorData, options: []) as? [String: Any]
-                    handle(error: .gigyaSDK(error: gigyaError, dataDictionary: json))
+                    handle(error: .gigyaSDKError(error: gigyaError, dataDictionary: json))
                     return
                 }
                 guard let sessionData = data["sessionInfo"] as? [String: Any],
@@ -101,7 +101,7 @@ extension OwnID.GigyaSDK {
                             if case let .gigyaError(data) = error {
                                 json = data.toDictionary()
                             }
-                            handle(error: .gigyaSDK(error: error, dataDictionary: json))
+                            handle(error: .gigyaSDKError(error: error, dataDictionary: json))
                         }
                     }
                 } else {

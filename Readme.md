@@ -297,34 +297,6 @@ case .plugin(let pluginError):
 }
 ```
 
-### Interruptions
-The following is an example of handling interruptions:
-
-[Complete example](https://github.com/OwnID/ownid-ios-sdk-demo/blob/master/GigyaDemo/RegisterViewModel.swift)
-```swift
-case .failure(let ownIDSDKError):
-    switch ownIDSDKError {
-    case .plugin(let gigyaPluginError):
-        if let gigyaSDKError = gigyaPluginError as? OwnID.GigyaSDK.Error<Your Account Protocol Of Gigya> {
-            switch gigyaSDKError {
-            case .login(let loginError):
-                switch loginError.interruption {
-                case .pendingVerification:
-                    print("pendingVerification")
-
-                default:
-                    break
-                }
-            default:
-                break
-            }
-        }
-
-    default:
-        break
-    }
-```
-
 ### Handling Gigya Request Data
 The following example shows how to get request data from the Gigya SDK if an error occurred
 
@@ -333,10 +305,10 @@ The following example shows how to get request data from the Gigya SDK if an err
 case .failure(let error):
     switch error {
     case .plugin(let gigyaPluginError):
-        if let gigyaSDKError = gigyaPluginError as? OwnID.GigyaSDK.Error<GigyaAccount> {
-            switch gigyaSDKError {
-            case .gigyaSDK(let error, let dataDictionary):
-                switch error {
+        if let error = gigyaPluginError as? OwnID.GigyaSDK.Error {
+            switch error {
+            case .gigyaSDKError(let networkError, let dataDictionary):
+                switch networkError {
                 case .gigyaError(let model):
                     //handling the data
                     print(dataDictionary)

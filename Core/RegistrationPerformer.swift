@@ -42,7 +42,7 @@ extension OwnID.GigyaSDK.Registration {
                                                   configuration: OwnID.FlowsSDK.RegistrationConfiguration,
                                                   parameters: RegisterParameters) -> PublisherType {
         Future<OwnID.RegisterResult, OwnID.CoreSDK.Error> { promise in
-            func handle(error: OwnID.GigyaSDK.Error<T>) {
+            func handle(error: OwnID.GigyaSDK.Error) {
                 OwnID.CoreSDK.logger.logGigya(.errorEntry(message: "error: \(error)", Self.self))
                 promise(.failure(.plugin(error: error)))
             }
@@ -73,7 +73,11 @@ extension OwnID.GigyaSDK.Registration {
                     promise(.success(OwnID.RegisterResult(operationResult: VoidOperationResult(), authType: configuration.payload.authType)))
                     
                 case .failure(let error):
-                    handle(error: .login(error: error))
+                    var json: [String: Any]?
+                    if case let .gigyaError(data) = error.error {
+                        json = data.toDictionary()
+                    }
+                    handle(error: .gigyaSDKError(error: error.error, dataDictionary: json))
                 }
             }
         }

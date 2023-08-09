@@ -3,9 +3,8 @@ import Foundation
 import Gigya
 
 public extension OwnID.GigyaSDK {
-    enum Error<AccountType: GigyaAccountProtocol>: PluginError {
-        case login(error: LoginApiError<AccountType>)
-        case gigyaSDK(error: NetworkError, dataDictionary: [String: Any]?)
+    enum Error: PluginError {
+        case gigyaSDKError(error: NetworkError, dataDictionary: [String: Any]?)
         case badIdTokenFormat
         case UIDIsMissing
         case idTokenNotFound
@@ -21,10 +20,19 @@ public extension OwnID.GigyaSDK {
 extension OwnID.GigyaSDK.Error: LocalizedError {
     public var errorDescription: String? {
         switch self {
-        case .gigyaSDK(let error, _):
-            return error.localizedDescription
-        case .login(let error):
-            return error.error.localizedDescription
+        case .gigyaSDKError(let error, _):
+            switch error {
+            case .gigyaError(let data):
+                return data.errorMessage
+            case .providerError(let data):
+                return data
+            case .networkError(let error):
+                return error.localizedDescription
+            case .jsonParsingError(let error):
+                return error.localizedDescription
+            default:
+                return error.localizedDescription
+            }
         case .badIdTokenFormat:
             return "Wrong id token format"
         case .emailIsNotValid:
@@ -46,4 +54,3 @@ extension OwnID.GigyaSDK.Error: LocalizedError {
         }
     }
 }
-
